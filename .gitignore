@@ -1,12 +1,40 @@
+*.swp
+*.iml
+*.ipr
+*.iws
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+.idea
+target
+*/target
+.DS_Store
+*.pid
 
 # Package Files #
 *.jar
 *.war
 *.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# Eclipse files
+.xml
+.settings
+.project
+.classpath
+.bpmn
+core/.xml
+felix-cache
+.metadata
+test-support/.externalToolBuilders
+test-support/maven-eclipse.xml
+eclipse-classes
+phantomjsdriver.log
+#H2 DB
+*.h2.db
+
+*.pyc
+server/state.lock.db
+clients/webapp/src/main/.tern-project
+clients/webapp/src/main/.tern-port
+
+#ignore temporary files
+.#*
+\#*
