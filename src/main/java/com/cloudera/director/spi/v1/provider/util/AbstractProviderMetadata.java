@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.provider;
+package com.cloudera.director.spi.v1.provider.util;
+
+import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.provider.ProviderMetadata;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +26,7 @@ import java.util.Locale;
 /**
  * Base class for provider metadata implementations.
  */
-public class BaseProviderMetadata implements ProviderMetadata {
+public abstract class AbstractProviderMetadata implements ProviderMetadata {
 
   /**
    * The unique identifier of the provider within its scope.
@@ -43,19 +45,9 @@ public class BaseProviderMetadata implements ProviderMetadata {
   private final String description;
 
   /**
-   * The class or interface representing the type of provider.
-   */
-  private final Class<?> providerType;
-
-  /**
    * The list of configuration properties that can be given to configure the provider.
    */
   private final List<ConfigurationProperty> providerConfigurationProperties;
-
-  /**
-   * The credentials provider metadata.
-   */
-  private final CredentialsProviderMetadata credentialsProviderMetadata;
 
   /**
    * Creates an abstract provider metadata with the specified parameters.
@@ -64,36 +56,15 @@ public class BaseProviderMetadata implements ProviderMetadata {
    * @param name                            the name of the provider, suitable for display in a drop-down menu of peer providers
    *                                        within the same scope
    * @param description                     the human-readable description of the provider
-   * @param providerType                    the class or interface representing the type of provider
    * @param providerConfigurationProperties the list of configuration properties that can be given to configure the provider
-   * @param credentialsProviderMetadata     the credentials provider metadata
    */
-  public BaseProviderMetadata(String id, String name, String description, Class<?> providerType,
-      List<ConfigurationProperty> providerConfigurationProperties, CredentialsProviderMetadata credentialsProviderMetadata) {
-    if (id == null) {
-      throw new NullPointerException("id is null");
-    }
-    this.id = id;
-    if (name == null) {
-      throw new NullPointerException("name is null");
-    }
-    this.name = name;
-    if (description == null) {
-      throw new NullPointerException("description is null");
-    }
-    this.description = description;
-    if (providerType == null) {
-      throw new NullPointerException("providerType is null");
-    }
-    this.providerType = providerType;
-    if (providerConfigurationProperties == null) {
-      throw new NullPointerException("providerConfigurationProperties is null");
-    }
-    this.providerConfigurationProperties = Collections.unmodifiableList(new ArrayList<ConfigurationProperty>(providerConfigurationProperties));
-    if (credentialsProviderMetadata == null) {
-      throw new NullPointerException("credentialsProviderMetadata is null");
-    }
-    this.credentialsProviderMetadata = credentialsProviderMetadata;
+  public AbstractProviderMetadata(String id, String name, String description,
+      List<ConfigurationProperty> providerConfigurationProperties) {
+    this.id = checkNotNull(id, "is is null");
+    this.name = checkNotNull(name, "name is null");
+    this.description = checkNotNull(description, "description is null");
+    this.providerConfigurationProperties = Collections.unmodifiableList(
+        checkNotNull(providerConfigurationProperties, "providerConfigurationProperties is null"));
   }
 
   @Override
@@ -108,23 +79,13 @@ public class BaseProviderMetadata implements ProviderMetadata {
 
   @Override
   // NOTE: This implementation does not do any actual localization, and simply returns the fixed description.
-  // Plugin implementors may override to perform localization.
+  // Plugin implementers may override to perform localization.
   public String getDescription(Locale locale) {
     return description;
   }
 
   @Override
-  public Class<?> getProviderType() {
-    return providerType;
-  }
-
-  @Override
   public List<ConfigurationProperty> getProviderConfigurationProperties() {
     return providerConfigurationProperties;
-  }
-
-  @Override
-  public CredentialsProviderMetadata getCredentialsProviderMetadata() {
-    return credentialsProviderMetadata;
   }
 }

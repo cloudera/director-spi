@@ -34,4 +34,13 @@ public interface ResourceTemplate extends Configured {
    * @return the map of tags to be applied to resources created from the template
    */
   Map<String, String> getTags();
+
+  /**
+   * Return the underlying cloud provider specific implementation or null
+   * <p/>
+   * Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.
+   */
+  Object unwrap();
+
 }

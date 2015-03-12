@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.compute;
+package com.cloudera.director.spi.v1.compute.util;
 
-import com.cloudera.director.spi.v1.model.AbstractInstance;
+import com.cloudera.director.spi.v1.compute.ComputeInstance;
+import com.cloudera.director.spi.v1.compute.ComputeInstanceTemplate;
+import com.cloudera.director.spi.v1.model.util.AbstractInstance;
+
+import java.net.InetAddress;
 
 /**
  * Abstract base class for compute instance implementations.
  *
- * @param <D> the type of compute instance details
  * @param <T> the type of compute instance template from which compute instances are constructed
  */
-public class AbstractComputeInstance<D, T extends ComputeInstanceTemplate>
-    extends AbstractInstance<D, T> implements ComputeInstance {
+public abstract class AbstractComputeInstance<T extends ComputeInstanceTemplate>
+    extends AbstractInstance<T> implements ComputeInstance<T> {
 
   /**
    * The resource type representing a generic compute instance.
@@ -33,26 +36,20 @@ public class AbstractComputeInstance<D, T extends ComputeInstanceTemplate>
   /**
    * Creates an abstract compute instance with the specified parameters.
    *
-   * @param template           the template from which the resource was created
-   * @param instanceIdentifier the instance identifier
+   * @param template   the template from which the resource was created
+   * @param instanceId the instance identifier
    */
-  protected AbstractComputeInstance(T template, String instanceIdentifier) {
-    this(template, instanceIdentifier, null);
-  }
-
-  /**
-   * Creates an abstract compute instance with the specified parameters.
-   *
-   * @param template           the template from which the instance was created
-   * @param instanceIdentifier the instance identifier
-   * @param instanceDetails    the provider-specific instance details
-   */
-  protected AbstractComputeInstance(T template, String instanceIdentifier, D instanceDetails) {
-    super(template, instanceIdentifier, instanceDetails);
+  protected AbstractComputeInstance(T template, String instanceId, InetAddress privateIpAddress) {
+    super(template, instanceId, privateIpAddress);
   }
 
   @Override
   public Type getType() {
     return TYPE;
+  }
+
+  @Override
+  public Object unwrap() {
+    return null;
   }
 }

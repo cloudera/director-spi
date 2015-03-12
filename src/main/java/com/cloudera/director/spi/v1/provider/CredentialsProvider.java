@@ -33,8 +33,8 @@ public interface CredentialsProvider<T> {
   /**
    * Creates credentials based on the specified configuration.
    *
-   * @param config the configuration
+   * @param configuration the configuration
    * @return the credentials
    */
-  T createCredentials(Configured config);
+  T createCredentials(Configured configuration);
 }

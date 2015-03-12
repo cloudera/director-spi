@@ -12,19 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.compute;
+package com.cloudera.director.spi.v1.compute.util;
 
-import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.compute.ComputeInstance;
+import com.cloudera.director.spi.v1.compute.ComputeInstanceTemplate;
+import com.cloudera.director.spi.v1.compute.ComputeProvider;
 import com.cloudera.director.spi.v1.model.Configured;
-import com.cloudera.director.spi.v1.provider.AbstractInstanceProvider;
-
-import java.util.List;
+import com.cloudera.director.spi.v1.provider.util.AbstractInstanceProvider;
 
 /**
  * Abstract base class for compute provider implementations.
+ *
+ * @param <R> type of the resource that can be created by this provider
+ * @param <T> type of the template needed to create resources
  */
-public abstract class AbstractComputeProvider extends AbstractInstanceProvider
-    implements ComputeProvider {
+public abstract class AbstractComputeProvider<R extends ComputeInstance<T>, T extends ComputeInstanceTemplate>
+    extends AbstractInstanceProvider<R, T> implements ComputeProvider<R, T> {
 
   /**
    * Creates an abstract compute provider with the specified parameters.
@@ -33,10 +36,5 @@ public abstract class AbstractComputeProvider extends AbstractInstanceProvider
    */
   public AbstractComputeProvider(Configured configuration) {
     super(configuration);
-  }
-
-  @Override
-  public List<ConfigurationProperty> getTemplateConfigurationProperties() {
-    return ComputeInstanceTemplate.getConfigurationProperties();
   }
 }

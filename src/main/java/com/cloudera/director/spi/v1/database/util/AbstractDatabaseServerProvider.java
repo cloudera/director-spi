@@ -12,19 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.database;
+package com.cloudera.director.spi.v1.database.util;
 
-import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.database.DatabaseServerInstance;
+import com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate;
+import com.cloudera.director.spi.v1.database.DatabaseServerProvider;
 import com.cloudera.director.spi.v1.model.Configured;
-import com.cloudera.director.spi.v1.provider.AbstractInstanceProvider;
-
-import java.util.List;
+import com.cloudera.director.spi.v1.provider.util.AbstractInstanceProvider;
 
 /**
  * Abstract base class for database server provider implementations.
+ *
+ * @param <R> type of the database instance created by this provider
+ * @param <T> type of the instance template needed to create an instance
  */
-public abstract class AbstractDatabaseServerProvider extends AbstractInstanceProvider
-    implements DatabaseServerProvider {
+public abstract class AbstractDatabaseServerProvider
+    <R extends DatabaseServerInstance<T>, T extends DatabaseServerInstanceTemplate>
+    extends AbstractInstanceProvider<R, T> implements DatabaseServerProvider<R, T> {
 
   /**
    * Creates an abstract database server provider with the specified parameters.
@@ -33,10 +37,5 @@ public abstract class AbstractDatabaseServerProvider extends AbstractInstancePro
    */
   public AbstractDatabaseServerProvider(Configured configuration) {
     super(configuration);
-  }
-
-  @Override
-  public List<ConfigurationProperty> getTemplateConfigurationProperties() {
-    return DatabaseServerInstanceTemplate.getConfigurationProperties();
   }
 }

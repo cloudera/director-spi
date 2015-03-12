@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Represents a cloud resource.
  */
-public interface Resource {
+public interface Resource<T extends ResourceTemplate> {
 
   /**
    * Represents a type of cloud resource.
@@ -48,7 +48,7 @@ public interface Resource {
    *
    * @return the template from which the resource was created
    */
-  ResourceTemplate getTemplate();
+  T getTemplate();
 
   /**
    * Returns an external identifier which uniquely identifies the resource within its type and scope.
@@ -70,13 +70,14 @@ public interface Resource {
    *
    * @return a map representing the properties of the resource
    */
-  Map<String, String> getPropertyValues();
+  Map<String, String> getProperties();
 
   /**
-   * Returns the provider-specific resource details, which may be <code>null</code> if (for example)
-   * the resource is still being provisioned.
-   *
-   * @return the provider-specific resource details
+   * Return the provider specific underlying implementation of this resource
+   * <p/>
+   * Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.
    */
   Object unwrap();
+
 }

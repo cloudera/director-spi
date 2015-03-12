@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.provider;
+package com.cloudera.director.spi.v1.provider.util;
 
-import com.cloudera.director.spi.v1.model.ConfigurationProperty;
 import com.cloudera.director.spi.v1.model.Configured;
+import com.cloudera.director.spi.v1.model.Instance;
 import com.cloudera.director.spi.v1.model.InstanceTemplate;
-
-import java.util.List;
+import com.cloudera.director.spi.v1.provider.InstanceProvider;
 
 /**
  * Abstract base class for instance provider implementations.
  */
-public abstract class AbstractInstanceProvider extends AbstractResourceProvider
-    implements InstanceProvider {
+public abstract class AbstractInstanceProvider<R extends Instance<T>, T extends InstanceTemplate>
+    extends AbstractResourceProvider<R, T> implements InstanceProvider<R, T> {
 
   /**
    * Creates an abstract instance provider with the specified parameters.
@@ -33,10 +32,5 @@ public abstract class AbstractInstanceProvider extends AbstractResourceProvider
    */
   public AbstractInstanceProvider(Configured configuration) {
     super(configuration);
-  }
-
-  @Override
-  public List<ConfigurationProperty> getTemplateConfigurationProperties() {
-    return InstanceTemplate.getConfigurationProperties();
   }
 }

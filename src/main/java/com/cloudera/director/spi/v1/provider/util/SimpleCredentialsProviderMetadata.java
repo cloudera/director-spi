@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.provider;
+package com.cloudera.director.spi.v1.provider.util;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.provider.CredentialsProviderMetadata;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Abstract base class for credentials provider metadata.
  */
-public class AbstractCredentialsProviderMetadata implements CredentialsProviderMetadata {
+public class SimpleCredentialsProviderMetadata implements CredentialsProviderMetadata {
   /**
    * The list of configuration properties that can be given to configure a credentials provider
    * for the provider.
@@ -31,15 +32,17 @@ public class AbstractCredentialsProviderMetadata implements CredentialsProviderM
   private final List<ConfigurationProperty> credentialsConfigurationProperties;
 
   /**
-   * Creates an abstract credentials provider metadata with the specified parameters.
+   * Creates a credentials provider metadata with the specified parameters.
    *
-   * @param credentialsConfigurationProperties the list of configuration properties that can be given to configure the credentials provider
+   * @param configurationProperties the list of configuration properties that can
+   *                                be given to configure the credentials provider
    */
-  public AbstractCredentialsProviderMetadata(List<ConfigurationProperty> credentialsConfigurationProperties) {
-    if (credentialsConfigurationProperties == null) {
+  public SimpleCredentialsProviderMetadata(List<ConfigurationProperty> configurationProperties) {
+    if (configurationProperties == null) {
       throw new NullPointerException("credentialsConfigurationProperties is null");
     }
-    this.credentialsConfigurationProperties = Collections.unmodifiableList(new ArrayList<ConfigurationProperty>(credentialsConfigurationProperties));
+    this.credentialsConfigurationProperties = Collections.unmodifiableList(
+        new ArrayList<ConfigurationProperty>(configurationProperties));
   }
 
   @Override

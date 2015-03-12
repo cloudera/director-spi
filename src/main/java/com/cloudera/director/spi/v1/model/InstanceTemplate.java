@@ -14,9 +14,11 @@
 
 package com.cloudera.director.spi.v1.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import static com.cloudera.director.spi.v1.model.InstanceTemplate.InstanceTemplateConfigurationProperty.INSTANCE_NAME_PREFIX;
+
+import com.cloudera.director.spi.v1.model.util.SimpleResourceTemplate;
+import com.cloudera.director.spi.v1.util.ConfigurationPropertiesUtil;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -24,19 +26,16 @@ import java.util.Map;
 /**
  * Represents a template for constructing cloud instances.
  */
-public class InstanceTemplate extends BaseResourceTemplate {
+public class InstanceTemplate extends SimpleResourceTemplate {
 
   /**
    * The list of configuration properties (including inherited properties).
    */
-  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES;
-
-  static {
-    List<ConfigurationProperty> configurationProperties = new ArrayList<ConfigurationProperty>();
-    configurationProperties.addAll(BaseResourceTemplate.getConfigurationProperties());
-    configurationProperties.addAll(Arrays.asList(InstanceTemplateConfigurationProperty.values()));
-    CONFIGURATION_PROPERTIES = Collections.unmodifiableList(configurationProperties);
-  }
+  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
+      ConfigurationPropertiesUtil.merge(
+          SimpleResourceTemplate.getConfigurationProperties(),
+          ConfigurationPropertiesUtil.asList(InstanceTemplateConfigurationProperty.values())
+      );
 
   /**
    * Returns the list of configuration properties for creating an instance template,
@@ -57,7 +56,8 @@ public class InstanceTemplate extends BaseResourceTemplate {
     /**
      * String to use as prefix for instance names.
      */
-    INSTANCE_NAME_PREFIX("instanceNamePrefix", false, "director", "The string to use as a prefix for instance names.", null);
+    INSTANCE_NAME_PREFIX("instanceNamePrefix", false, "director",
+        "The string to use as a prefix for instance names.", null);
 
     /**
      * Creates a configuration property with the specified parameters.
@@ -68,7 +68,8 @@ public class InstanceTemplate extends BaseResourceTemplate {
      * @param description  the human-readable description of the configuration property
      * @param errorMessage the human-readable error message for when a required configuration property is missing
      */
-    private InstanceTemplateConfigurationProperty(String configKey, boolean required, String defaultValue, String description, String errorMessage) {
+    private InstanceTemplateConfigurationProperty(String configKey, boolean required,
+        String defaultValue, String description, String errorMessage) {
       this.configKey = configKey;
       this.required = required;
       this.defaultValue = defaultValue;
@@ -155,7 +156,7 @@ public class InstanceTemplate extends BaseResourceTemplate {
    */
   public InstanceTemplate(String name, Configured configuration, Map<String, String> tags) {
     super(name, configuration, tags);
-    this.instanceNamePrefix = configuration.getConfigurationPropertyValue(InstanceTemplateConfigurationProperty.INSTANCE_NAME_PREFIX);
+    this.instanceNamePrefix = configuration.getConfigurationValue(INSTANCE_NAME_PREFIX);
   }
 
   /**

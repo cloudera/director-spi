@@ -18,9 +18,9 @@ import com.cloudera.director.spi.v1.model.Instance;
 
 /**
  * Represents a cloud database server instance.
+ *
+ * @param <T> instance template type
  */
-public interface DatabaseServerInstance extends Instance {
-
-  @Override
-  DatabaseServerInstanceTemplate getTemplate();
+public interface DatabaseServerInstance<T extends DatabaseServerInstanceTemplate>
+    extends Instance<T> {
 }

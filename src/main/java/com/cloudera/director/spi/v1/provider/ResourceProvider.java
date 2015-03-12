@@ -14,17 +14,21 @@
 
 package com.cloudera.director.spi.v1.provider;
 
-import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.Resource;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 /**
- * Represents a provider of resources.
+ * Represents a provider of cloud resources.
+ *
+ * @param <R> type of the resource created by this provider
+ * @param <T> type of the template required by this provider to create a resource
  */
-public interface ResourceProvider {
+public interface ResourceProvider
+    <R extends Resource<T>, T extends ResourceTemplate> {
 
   /**
    * Returns the resource provider metadata.
@@ -41,13 +45,11 @@ public interface ResourceProvider {
   Resource.Type getResourceType();
 
   /**
-   * Returns the list of configuration properties that can be given to the provider to
-   * configure a resource template.
+   * Create a new resource template instance for this provider using the configuration
    *
-   * @return the list of configuration properties that can be given to the provider to
-   * configure a resource template
+   * @return a configured resource template
    */
-  List<ConfigurationProperty> getTemplateConfigurationProperties();
+  T createResourceTemplate(String name, Configured configuration, Map<String, String> tags);
 
   /**
    * Atomically allocates multiple resources with the specified identifiers based on a single resource template.
@@ -60,8 +62,7 @@ public interface ResourceProvider {
    * @return the resources, some or all of which may have <code>null</code> details if they are not fully ready for use
    * @throws InterruptedException if the operation is interrupted
    */
-  Collection<? extends Resource> allocate(ResourceTemplate template, Collection<String> resourceIds, int minCount)
-      throws InterruptedException;
+  Collection<R> allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException;
 
   /**
    * Returns current resource information for the specified resources, which are guaranteed to have
@@ -69,23 +70,20 @@ public interface ResourceProvider {
    * so that any additional information associated with the resource, such as its template,
    * can be attached to the resulting resources.
    *
-   * @param resources resources previously created by this provider, some or all of which may have
-   *                  <code>null</code> details if they are not fully ready for use
+   * @param template    the template that was used to create those resources
+   * @param resourceIds the unique identifiers for the resources
    * @return new resources, with the most currently available information, corresponding to the
    * subset of the resources which still exist. Some or all of them may have <code>null</code>
    * details if they are not fully ready for use
    * @throws InterruptedException if the operation is interrupted
    */
-  Collection<? extends Resource> find(Collection<? extends Resource> resources)
-      throws InterruptedException;
+  Collection<R> find(T template, Collection<String> resourceIds) throws InterruptedException;
 
   /**
    * Permanently removes the specified resources, which are guaranteed to have been created by this provider.
    *
-   * @param resources resources previously created by this provider, which are guaranteed not to have
-   *                  <code>null</code> details
+   * @param resourceIds the unique identifiers for the resources
    * @throws InterruptedException if the operation is interrupted
    */
-  void delete(Collection<? extends Resource> resources)
-      throws InterruptedException;
+  void delete(Collection<String> resourceIds) throws InterruptedException;
 }

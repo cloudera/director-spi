@@ -14,8 +14,17 @@
 
 package com.cloudera.director.spi.v1.provider;
 
+import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+
+import java.util.List;
+
 /**
  * Provider metadata about a resource provider.
  */
 public interface ResourceProviderMetadata extends ProviderMetadata {
+
+  /**
+   * Get the list of properties needed to create a new resource template
+   */
+  List<ConfigurationProperty> getResourceTemplateConfigurationProperties();
 }

@@ -14,42 +14,14 @@
 
 package com.cloudera.director.spi.v1.compute;
 
-import com.cloudera.director.spi.v1.model.Resource;
-import com.cloudera.director.spi.v1.model.ResourceTemplate;
 import com.cloudera.director.spi.v1.provider.InstanceProvider;
-
-import java.util.Collection;
 
 /**
  * Represents a provider of compute instances.
+ *
+ * @param <R> type of the instance created by this compute provider
+ * @param <T> type of the template needed to create an instance
  */
-public interface ComputeProvider extends InstanceProvider {
-
-  /**
-   * Atomically allocates multiple compute instances with the specified identifiers based on a single instance template.
-   *
-   * @param template the instance template
-   * @param ids      the unique identifiers for the instances
-   * @param minCount the minimum number of instances to allocate if not all instances can be allocated
-   * @return the instances, some or all of which may have <code>null</code> details if they were not allocated successfully
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends ComputeInstance> allocate(ResourceTemplate template, Collection<String> ids, int minCount)
-      throws InterruptedException;
-
-  /**
-   * Returns current compute instance information for the specified compute instances, which are guaranteed to have
-   * been created by this provider.
-   *
-   * @param computeInstances compute instances previously created by this provider, some or all of which may have
-   *                         <code>null</code> details if they are not fully ready for use
-   * @return new compute instances, with the most currently available information, corresponding to the
-   * subset of the compute instances which still exist. Some or all of them may have <code>null</code>
-   * details if they are not fully ready for use
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends ComputeInstance> find(Collection<? extends Resource> computeInstances)
-      throws InterruptedException;
+public interface ComputeProvider<R extends ComputeInstance<T>, T extends ComputeInstanceTemplate>
+    extends InstanceProvider<R, T> {
 }

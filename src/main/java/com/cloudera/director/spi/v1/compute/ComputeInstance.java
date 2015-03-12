@@ -18,9 +18,8 @@ import com.cloudera.director.spi.v1.model.Instance;
 
 /**
  * Represents a cloud compute instance.
+ *
+ * @param <T> the type for the template for this instance
  */
-public interface ComputeInstance extends Instance {
-
-  @Override
-  ComputeInstanceTemplate getTemplate();
+public interface ComputeInstance<T extends ComputeInstanceTemplate> extends Instance<T> {
 }

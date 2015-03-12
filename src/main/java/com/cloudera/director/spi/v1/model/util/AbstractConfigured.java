@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.model;
+package com.cloudera.director.spi.v1.model.util;
+
+import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
+
+import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.Configured;
 
 import java.util.Map;
 
@@ -32,19 +37,16 @@ public abstract class AbstractConfigured implements Configured {
    * @param configuration source of configuration
    */
   public AbstractConfigured(Configured configuration) {
-    if (configuration == null) {
-      throw new NullPointerException("configuration is null");
-    }
-    this.configuration = configuration;
+    this.configuration = checkNotNull(configuration, "configuration is null");
   }
 
   @Override
-  public Map<String, String> getConfigurationAsMap() {
-    return configuration.getConfigurationAsMap();
+  public Map<String, String> getConfiguration() {
+    return configuration.getConfiguration();
   }
 
   @Override
-  public String getConfigurationPropertyValue(ConfigurationProperty configurationProperty) {
-    return configuration.getConfigurationPropertyValue(configurationProperty);
+  public String getConfigurationValue(ConfigurationProperty property) {
+    return configuration.getConfigurationValue(property);
   }
 }

@@ -29,18 +29,17 @@ public interface CloudProviderMetadata extends ProviderMetadata {
   List<ResourceProviderMetadata> getResourceProviderMetadata();
 
   /**
-   * Returns resource provider metadata for all resource providers of the specified type.
-   *
-   * @param resourceProviderType the resource provider type
-   * @return resource provider metadata for all resource providers of the specified type
-   */
-  List<ResourceProviderMetadata> getResourceProviderMetadata(Class<?> resourceProviderType);
-
-  /**
    * Returns the resource provider metadata for the specified resource provider ID.
    *
    * @param resourceProviderId the resource provider ID
    * @return the resource provider metadata for the specified resource provider ID
    */
   ResourceProviderMetadata getResourceProviderMetadata(String resourceProviderId);
+
+  /**
+   * Returns the credentials provider metadata for the provider.
+   *
+   * @return the credentials provider metadata for the provider
+   */
+  CredentialsProviderMetadata getCredentialsProviderMetadata();
 }

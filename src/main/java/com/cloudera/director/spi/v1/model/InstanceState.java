@@ -37,9 +37,11 @@ public interface InstanceState {
   String getInstanceStateDescription(Locale locale);
 
   /**
-   * Returns the provider-specific instance state details.
-   *
-   * @return the provider-specific instance state details
+   * Return the provider specific version of this state object or null
+   * <p/>
+   * Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.
    */
-  Object getInstanceStateDetails();
+  Object unwrap();
+
 }

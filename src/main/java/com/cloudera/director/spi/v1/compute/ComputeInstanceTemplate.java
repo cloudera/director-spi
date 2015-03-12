@@ -18,10 +18,8 @@ import com.cloudera.director.spi.v1.model.ConfigurationProperty;
 import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.InstanceTemplate;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
+import com.cloudera.director.spi.v1.util.ConfigurationPropertiesUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,14 +32,11 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
   /**
    * The list of configuration properties (including inherited properties).
    */
-  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES;
-
-  static {
-    List<ConfigurationProperty> configurationProperties = new ArrayList<ConfigurationProperty>();
-    configurationProperties.addAll(InstanceTemplate.getConfigurationProperties());
-    configurationProperties.addAll(Arrays.asList(ComputeInstanceTemplateConfigurationProperty.values()));
-    CONFIGURATION_PROPERTIES = Collections.unmodifiableList(configurationProperties);
-  }
+  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
+      ConfigurationPropertiesUtil.merge(
+          InstanceTemplate.getConfigurationProperties(),
+          ConfigurationPropertiesUtil.asList(ComputeInstanceTemplateConfigurationProperty.values())
+      );
 
   /**
    * Returns the list of configuration properties for creating a compute instance template,
@@ -78,7 +73,8 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
      * @param description  the human-readable description of the configuration property
      * @param errorMessage the human-readable error message for when a required configuration property is missing
      */
-    private ComputeInstanceTemplateConfigurationProperty(String configKey, boolean required, String defaultValue, String description, String errorMessage) {
+    private ComputeInstanceTemplateConfigurationProperty(String configKey, boolean required,
+        String defaultValue, String description, String errorMessage) {
       this.configKey = configKey;
       this.required = required;
       this.defaultValue = defaultValue;

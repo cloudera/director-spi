@@ -19,14 +19,11 @@ import java.net.InetAddress;
 /**
  * Represents a cloud server instance.
  */
-public interface Instance extends Resource {
-
-  @Override
-  InstanceTemplate getTemplate();
+public interface Instance<T extends InstanceTemplate> extends Resource<T> {
 
   /**
-   * Returns the private IP address of the instance, which may be <code>null</code> (if, for example, the instance
-   * has not finished being provisioned.
+   * Returns the private IP address of the instance, which may be <code>null</code>
+   * (if, for example, the instance has not finished being provisioned).
    *
    * @return the private IP address of the instance, which may be <code>null</code>
    */

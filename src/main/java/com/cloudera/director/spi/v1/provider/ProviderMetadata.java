@@ -49,23 +49,10 @@ public interface ProviderMetadata {
   String getDescription(Locale locale);
 
   /**
-   * Returns a class or interface representing the type of provider.
-   *
-   * @return a class or interface representing the type of provider
-   */
-  Class<?> getProviderType();
-
-  /**
    * Returns the list of configuration properties that can be given to configure the provider.
    *
    * @return the list of configuration properties that can be given to configure the provider
    */
   List<ConfigurationProperty> getProviderConfigurationProperties();
 
-  /**
-   * Returns the credentials provider metadata for the provider.
-   *
-   * @return the credentials provider metadata for the provider
-   */
-  CredentialsProviderMetadata getCredentialsProviderMetadata();
 }

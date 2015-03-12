@@ -19,8 +19,6 @@ import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.InstanceTemplate;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,13 +30,8 @@ public class DatabaseServerInstanceTemplate extends InstanceTemplate {
   /**
    * The list of configuration properties (including inherited properties).
    */
-  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES;
-
-  static {
-    List<ConfigurationProperty> configurationProperties = new ArrayList<ConfigurationProperty>();
-    configurationProperties.addAll(InstanceTemplate.getConfigurationProperties());
-    CONFIGURATION_PROPERTIES = Collections.unmodifiableList(configurationProperties);
-  }
+  private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
+      InstanceTemplate.getConfigurationProperties();
 
   /**
    * Returns the list of configuration properties for creating a compute instance template,

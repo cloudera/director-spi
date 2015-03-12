@@ -26,16 +26,16 @@ public interface Configured {
    *
    * @return the unmodifiable map of configuration parameter values
    */
-  Map<String, String> getConfigurationAsMap();
+  Map<String, String> getConfiguration();
 
   /**
    * Returns the value of the specified configuration property, or the default value if the value is not present
    * and the configuration property is optional.
    *
-   * @param configurationProperty the configuration property
+   * @param property the configuration property
    * @return the value of the specified configuration property, or the default value if the value is not present
    * and the configuration property is optional
    * @throws IllegalArgumentException if the specified configuration property is not present and required
    */
-  String getConfigurationPropertyValue(ConfigurationProperty configurationProperty);
+  String getConfigurationValue(ConfigurationProperty property);
 }

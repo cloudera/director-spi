@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.database;
+package com.cloudera.director.spi.v1.database.util;
 
-import com.cloudera.director.spi.v1.model.AbstractInstance;
+import com.cloudera.director.spi.v1.database.DatabaseServerInstance;
+import com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate;
+import com.cloudera.director.spi.v1.model.util.AbstractInstance;
+
+import java.net.InetAddress;
 
 /**
  * Abstract base class for database server instance implementations.
  *
- * @param <D> the type of database server instance details
  * @param <T> the type of database server instance template from which database server instances are constructed
  */
-public class AbstractDatabaseServerInstance<D, T extends DatabaseServerInstanceTemplate>
-    extends AbstractInstance<D, T> implements DatabaseServerInstance {
+public abstract class AbstractDatabaseServerInstance<T extends DatabaseServerInstanceTemplate>
+    extends AbstractInstance<T> implements DatabaseServerInstance<T> {
 
   /**
    * The resource type representing a database server instance.
@@ -33,26 +36,17 @@ public class AbstractDatabaseServerInstance<D, T extends DatabaseServerInstanceT
   /**
    * Creates an abstract database server instance with the specified parameters.
    *
-   * @param template           the template from which the instance was created
-   * @param instanceIdentifier the instance identifier
+   * @param template         the template from which the instance was created
+   * @param instanceId       the instance identifier
+   * @param privateIpAddress the private IP address of this instance
    */
-  protected AbstractDatabaseServerInstance(T template, String instanceIdentifier) {
-    this(template, instanceIdentifier, null);
-  }
-
-  /**
-   * Creates an abstract database server instance with the specified parameters.
-   *
-   * @param template           the template from which the instance was created
-   * @param instanceIdentifier the instance identifier
-   * @param instanceDetails    the provider-specific instance details
-   */
-  protected AbstractDatabaseServerInstance(T template, String instanceIdentifier, D instanceDetails) {
-    super(template, instanceIdentifier, instanceDetails);
+  protected AbstractDatabaseServerInstance(T template, String instanceId, InetAddress privateIpAddress) {
+    super(template, instanceId, privateIpAddress);
   }
 
   @Override
   public Type getType() {
     return TYPE;
   }
+
 }

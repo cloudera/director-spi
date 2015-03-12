@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.model;
+package com.cloudera.director.spi.v1.model.util;
+
+import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
+
+import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.Configured;
+import com.cloudera.director.spi.v1.model.ResourceTemplate;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -22,7 +28,7 @@ import java.util.Map;
 /**
  * Base resource template implementation.
  */
-public class BaseResourceTemplate extends AbstractConfigured implements ResourceTemplate {
+public class SimpleResourceTemplate extends AbstractConfigured implements ResourceTemplate {
 
   /**
    * The list of configuration properties (including inherited properties).
@@ -53,7 +59,7 @@ public class BaseResourceTemplate extends AbstractConfigured implements Resource
    *
    * @param resourceTemplate another resource template
    */
-  public BaseResourceTemplate(ResourceTemplate resourceTemplate) {
+  public SimpleResourceTemplate(ResourceTemplate resourceTemplate) {
     this(resourceTemplate.getName(), resourceTemplate, resourceTemplate.getTags());
   }
 
@@ -64,13 +70,12 @@ public class BaseResourceTemplate extends AbstractConfigured implements Resource
    * @param configuration the source of configuration
    * @param tags          the map of tags to be applied to resources created from the template
    */
-  public BaseResourceTemplate(String name, Configured configuration, Map<String, String> tags) {
+  public SimpleResourceTemplate(String name, Configured configuration, Map<String, String> tags) {
     super(configuration);
-    if (name == null) {
-      throw new NullPointerException("name is null");
-    }
-    this.name = name;
-    this.tags = (tags == null) ? Collections.<String, String>emptyMap() : Collections.unmodifiableMap(new LinkedHashMap<String, String>(tags));
+
+    this.name = checkNotNull(name, "name is null");
+    this.tags = (tags == null) ? Collections.<String, String>emptyMap() :
+        Collections.unmodifiableMap(new LinkedHashMap<String, String>(tags));
   }
 
   @Override
@@ -81,5 +86,10 @@ public class BaseResourceTemplate extends AbstractConfigured implements Resource
   @Override
   public Map<String, String> getTags() {
     return tags;
+  }
+
+  @Override
+  public Object unwrap() {
+    return null;
   }
 }

@@ -16,8 +16,7 @@ package com.cloudera.director.spi.v1.provider;
 
 import com.cloudera.director.spi.v1.model.Instance;
 import com.cloudera.director.spi.v1.model.InstanceState;
-import com.cloudera.director.spi.v1.model.Resource;
-import com.cloudera.director.spi.v1.model.ResourceTemplate;
+import com.cloudera.director.spi.v1.model.InstanceTemplate;
 
 import java.util.Collection;
 import java.util.Map;
@@ -25,44 +24,15 @@ import java.util.Map;
 /**
  * Represents a provider of instances.
  */
-public interface InstanceProvider extends ResourceProvider {
-
-  /**
-   * Atomically allocates multiple instances with the specified identifiers based on a single instance template.
-   * In addition to the guarantees made by {@link ResourceProvider#allocate}, this method guarantees that all instances
-   * with details will have private IP addresses.
-   *
-   * @param template    the instance template
-   * @param resourceIds the unique identifiers for the instances
-   * @param minCount    the minimum number of instances to allocate if not all instances can be allocated
-   * @return the instances, some or all of which may have <code>null</code> details if they were not allocated successfully
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends Instance> allocate(ResourceTemplate template, Collection<String> resourceIds, int minCount)
-      throws InterruptedException;
-
-  /**
-   * Returns current instance information for the specified instances, which are guaranteed to have
-   * been created by this provider.
-   *
-   * @param instances instances previously created by this provider, some or all of which may have
-   *                  <code>null</code> details if they are not fully ready for use
-   * @return new instances, with the most currently available information, corresponding to the
-   * subset of the instances which still exist. Some or all of them may have <code>null</code>
-   * details if they are not fully ready for use
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends Instance> find(Collection<? extends Resource> instances)
-      throws InterruptedException;
+public interface InstanceProvider<I extends Instance<T>, T extends InstanceTemplate>
+    extends ResourceProvider<I, T> {
 
   /**
    * Returns a map from instance identifiers to instance state for the specified batch of instances.
    *
-   * @param instances instances previously created by this provider, which are guaranteed not to have
-   *                  <code>null</code> details
+   * @param instanceIds the unique identifiers for the instances
    * @return the map from instance identifiers to instance state for the specified batch of instances
    */
-  Map<String, InstanceState> getInstanceState(Collection<? extends Resource> instances);
+  Map<String, InstanceState> getInstanceState(Collection<String> instanceIds);
+
 }

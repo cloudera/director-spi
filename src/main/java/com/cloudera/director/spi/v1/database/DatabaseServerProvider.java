@@ -14,42 +14,13 @@
 
 package com.cloudera.director.spi.v1.database;
 
-import com.cloudera.director.spi.v1.model.Resource;
-import com.cloudera.director.spi.v1.model.ResourceTemplate;
 import com.cloudera.director.spi.v1.provider.InstanceProvider;
-
-import java.util.Collection;
 
 /**
  * Represents a provider of database server instances.
  */
-public interface DatabaseServerProvider extends InstanceProvider {
+public interface DatabaseServerProvider
+    <R extends DatabaseServerInstance<T>, T extends DatabaseServerInstanceTemplate>
+    extends InstanceProvider<R, T> {
 
-  /**
-   * Atomically allocates multiple database server instances with the specified IDs based on a single instance template..
-   *
-   * @param template the instance template
-   * @param ids      the unique identifiers for the instances
-   * @param minCount the minimum number of instances to allocate if not all instances can be allocated
-   * @return the instances, some or all of which may have <code>null</code> details if they were not allocated successfully
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends DatabaseServerInstance> allocate(ResourceTemplate template, Collection<String> ids, int minCount)
-      throws InterruptedException;
-
-  /**
-   * Returns current database server instance information for the specified database server instances, which are guaranteed to have
-   * been created by this provider.
-   *
-   * @param databaseServerInstances database server instances previously created by this provider, some or all of which may have
-   *                                <code>null</code> details if they are not fully ready for use
-   * @return new database server instances, with the most currently available information, corresponding to the
-   * subset of the database server instances which still exist. Some or all of them may have <code>null</code>
-   * details if they are not fully ready for use
-   * @throws InterruptedException if the operation is interrupted
-   */
-  @Override
-  Collection<? extends DatabaseServerInstance> find(Collection<? extends Resource> databaseServerInstances)
-      throws InterruptedException;
 }

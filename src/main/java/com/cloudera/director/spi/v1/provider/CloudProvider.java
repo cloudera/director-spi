@@ -14,17 +14,16 @@ public interface CloudProvider {
    *
    * @return the cloud provider metadata
    */
-  CloudProviderMetadata getProviderMetadata();
+  CloudProviderMetadata getMetadata();
 
   /**
    * Returns the specified resource provider, using the specified configuration
-   * if it has not already been initialized.
    *
-   * @param resourceProviderId the resource provider ID, as returned by its metadata
-   * @param configuration      the configuration
+   * @param resourceProviderId    the resource provider ID, as returned by its metadata
+   * @param configuration the configuration
    * @return the specified resource provider, using the specified configuration
-   * if it has not already been initialized
-   * @throws IllegalArgumentException if the cloud provider does not have a resource provider with the specified ID
+   * @throws java.util.NoSuchElementException if the cloud provider does not have a
+   *                                          resource provider with the specified ID
    */
-  ResourceProvider getResourceProvider(String resourceProviderId, Configured configuration);
+  ResourceProvider createResourceProvider(String resourceProviderId, Configured configuration);
 }

@@ -12,16 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.provider;
+package com.cloudera.director.spi.v1.provider.util;
+
+import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.provider.ResourceProviderMetadata;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Base class for resource provider metadata implementations.
  */
-public class BaseResourceProviderMetadata extends BaseProviderMetadata implements ResourceProviderMetadata {
+public class SimpleResourceProviderMetadata
+    extends AbstractProviderMetadata implements ResourceProviderMetadata {
+
+  private final List<ConfigurationProperty> resourceTemplateConfigurationProperties;
+
+  public static SimpleResourceProviderMetadataBuilder builder() {
+    return new SimpleResourceProviderMetadataBuilder();
+  }
+
 
   /**
    * Creates an abstract resource provider metadata with the specified parameters.
@@ -30,12 +42,20 @@ public class BaseResourceProviderMetadata extends BaseProviderMetadata implement
    * @param name                            the name of the provider, suitable for display in a drop-down menu of peer providers
    *                                        within the same scope
    * @param description                     the human-readable description of the provider
-   * @param providerType                    the class or interface representing the type of provider
    * @param providerConfigurationProperties the list of configuration properties that can be given to configure the provider
-   * @param credentialsProviderMetadata     the credentials provider metadata
    */
-  public BaseResourceProviderMetadata(String id, String name, String description, Class<?> providerType,
-      List<ConfigurationProperty> providerConfigurationProperties, CredentialsProviderMetadata credentialsProviderMetadata) {
-    super(id, name, description, providerType, providerConfigurationProperties, credentialsProviderMetadata);
+  public SimpleResourceProviderMetadata(String id, String name, String description,
+      List<ConfigurationProperty> providerConfigurationProperties,
+      List<ConfigurationProperty> resourceTemplateConfigurationProperties) {
+    super(id, name, description, providerConfigurationProperties);
+
+    this.resourceTemplateConfigurationProperties = Collections.unmodifiableList(
+        checkNotNull(resourceTemplateConfigurationProperties,
+            "resourceTemplateConfigurationProperties is null"));
+  }
+
+  @Override
+  public List<ConfigurationProperty> getResourceTemplateConfigurationProperties() {
+    return resourceTemplateConfigurationProperties;
   }
 }
