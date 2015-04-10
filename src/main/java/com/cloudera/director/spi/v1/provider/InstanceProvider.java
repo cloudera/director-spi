@@ -30,9 +30,10 @@ public interface InstanceProvider<I extends Instance<T>, T extends InstanceTempl
   /**
    * Returns a map from instance identifiers to instance state for the specified batch of instances.
    *
+   * @param template    the template that was used to create those resources
    * @param instanceIds the unique identifiers for the instances
    * @return the map from instance identifiers to instance state for the specified batch of instances
    */
-  Map<String, InstanceState> getInstanceState(Collection<String> instanceIds);
+  Map<String, InstanceState> getInstanceState(T template, Collection<String> instanceIds);
 
 }

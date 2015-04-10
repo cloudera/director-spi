@@ -82,8 +82,9 @@ public interface ResourceProvider
   /**
    * Permanently removes the specified resources, which are guaranteed to have been created by this provider.
    *
+   * @param template    the template that was used to create those resources
    * @param resourceIds the unique identifiers for the resources
    * @throws InterruptedException if the operation is interrupted
    */
-  void delete(Collection<String> resourceIds) throws InterruptedException;
+  void delete(T template, Collection<String> resourceIds) throws InterruptedException;
 }
