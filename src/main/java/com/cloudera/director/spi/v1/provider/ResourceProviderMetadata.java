@@ -24,6 +24,13 @@ import java.util.List;
 public interface ResourceProviderMetadata extends ProviderMetadata {
 
   /**
+   * Returns the resource provider class.
+   *
+   * @return the resource provider class
+   */
+  Class<? extends ResourceProvider<?, ?>> getProviderClass();
+
+  /**
    * Get the list of properties needed to create a new resource template
    */
   List<ConfigurationProperty> getResourceTemplateConfigurationProperties();

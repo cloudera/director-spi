@@ -16,17 +16,17 @@ package com.cloudera.director.spi.v1.model.util;
 
 import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
+import com.cloudera.director.spi.v1.model.LocalizationContext;
 import com.cloudera.director.spi.v1.model.Resource;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
-
-import java.util.Locale;
 
 /**
  * Abstract base class for resource implementations.
  *
  * @param <T> the type of resource template from which resources are constructed
+ * @param <D> the type of resource details
  */
-public abstract class AbstractResource<T extends ResourceTemplate> implements Resource<T> {
+public abstract class AbstractResource<T extends ResourceTemplate, D> implements Resource<T> {
 
   /**
    * The resource type representing a generic resource.
@@ -53,7 +53,7 @@ public abstract class AbstractResource<T extends ResourceTemplate> implements Re
     @Override
     // NOTE: This implementation does not do any actual localization, and simply returns the fixed description.
     // Plugin implementers may override to perform localization.
-    public String getDescription(Locale locale) {
+    public String getDescription(LocalizationContext localizationContext) {
       return description;
     }
   }
@@ -69,13 +69,30 @@ public abstract class AbstractResource<T extends ResourceTemplate> implements Re
   private final String id;
 
   /**
+   * The provider-specific resource details.
+   */
+  private D details;
+
+  /**
+   * Creates an abstract resource with the specified parameters.
+   *
+   * @param template   the template from which the resource was created
+   * @param identifier the resource identifier
+   */
+  protected AbstractResource(T template, String identifier) {
+    this(template, identifier, null);
+  }
+
+  /**
    * Creates an abstract resource with the specified parameters.
    *
    * @param resourceId the resource id
+   * @param details    the provider-specific resource details
    */
-  protected AbstractResource(T template, String resourceId) {
+  protected AbstractResource(T template, String resourceId, D details) {
     this.template = checkNotNull(template, "template is null");
     this.id = checkNotNull(resourceId, "resourceId is null");
+    this.details = details;
   }
 
   @Override
@@ -94,7 +111,21 @@ public abstract class AbstractResource<T extends ResourceTemplate> implements Re
   }
 
   @Override
-  public String getDescription(Locale locale) {
-    return getType().getDescription(locale) + "[" + getId() + "]";
+  public D unwrap() {
+    return details;
+  }
+
+  /**
+   * Sets the provider-specific resource details.
+   *
+   * @param details the provider-specific resource details
+   */
+  protected void setDetails(D details) {
+    this.details = details;
+  }
+
+  @Override
+  public String getDescription(LocalizationContext localizationContext) {
+    return getType().getDescription(localizationContext) + "[" + getId() + "]";
   }
 }

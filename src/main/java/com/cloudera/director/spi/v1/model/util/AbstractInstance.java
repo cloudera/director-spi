@@ -23,9 +23,10 @@ import java.net.InetAddress;
  * Abstract base class for instance implementations.
  *
  * @param <T> the type of instance template from which instances are constructed
+ * @param <D> the type of instance details
  */
-public abstract class AbstractInstance<T extends InstanceTemplate>
-    extends AbstractResource<T> implements Instance<T> {
+public abstract class AbstractInstance<T extends InstanceTemplate, D>
+    extends AbstractResource<T, D> implements Instance<T> {
 
   /**
    * The resource type representing a generic instance.
@@ -45,7 +46,19 @@ public abstract class AbstractInstance<T extends InstanceTemplate>
    * @param privateIpAddress the private IP address of this instance
    */
   protected AbstractInstance(T template, String instanceId, InetAddress privateIpAddress) {
-    super(template, instanceId);
+    this(template, instanceId, privateIpAddress, null);
+  }
+
+  /**
+   * Creates an abstract instance with the specified parameters.
+   *
+   * @param template         the template from which the resource was created
+   * @param instanceId       the instance identifier
+   * @param privateIpAddress the private IP address of this instance
+   * @param details          the provider-specific instance details
+   */
+  protected AbstractInstance(T template, String instanceId, InetAddress privateIpAddress, D details) {
+    super(template, instanceId, details);
     this.privateIpAddress = privateIpAddress;
   }
 
@@ -57,5 +70,14 @@ public abstract class AbstractInstance<T extends InstanceTemplate>
   @Override
   public InetAddress getPrivateIpAddress() {
     return privateIpAddress;
+  }
+
+  /**
+   * Sets the private IP address of this instance.
+   *
+   * @param privateIpAddress the private IP address of this instance
+   */
+  protected void setPrivateIpAddress(InetAddress privateIpAddress) {
+    this.privateIpAddress = privateIpAddress;
   }
 }

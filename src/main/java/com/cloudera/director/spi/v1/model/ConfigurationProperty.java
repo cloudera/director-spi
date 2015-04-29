@@ -14,50 +14,187 @@
 
 package com.cloudera.director.spi.v1.model;
 
-import java.util.Locale;
-
 /**
  * A configuration property.
  */
 public interface ConfigurationProperty {
 
   /**
-   * The configuration key.
+   * Represents the type of a configuration property.
+   */
+  enum Type {
+
+    /**
+     * Boolean-valued configuration property type.
+     */
+    BOOLEAN,
+
+    /**
+     * Integer-valued configuration property type.
+     */
+    INTEGER,
+
+    /**
+     * Double-valued configuration property type.
+     */
+    DOUBLE,
+
+    /**
+     * String-valued configuration property type.
+     */
+    STRING
+  }
+
+  /**
+   * Represents the widget used to display and edit a configuration property.
+   */
+  public enum Widget {
+
+    /**
+     * Radio button widget.
+     */
+    RADIO,
+
+    /**
+     * Checkbox widget.
+     */
+    CHECKBOX,
+
+    /**
+     * Text box widget.
+     */
+    TEXT,
+
+    /**
+     * Password widget.
+     */
+    PASSWORD,
+
+    /**
+     * Numeric widget.
+     */
+    NUMBER,
+
+    /**
+     * Text area widget.
+     */
+    TEXTAREA,
+
+    /**
+     * File upload widget.
+     */
+    FILE,
+
+    /**
+     * List widget with fixed set of values.
+     */
+    LIST,
+
+    /**
+     * List widget that supports typing additional values.
+     */
+    OPENLIST
+  }
+
+  /**
+   * Represents an attribute of a configuration property that can be localized.
+   */
+  enum ConfigurationPropertyLocalizableAttribute implements LocalizableAttribute {
+
+    /**
+     * Missing value error message attribute.
+     */
+    MISSING_VALUE_ERROR_MESSAGE("missingValueErrorMessage");
+
+    /**
+     * The key component, used in building a localization key.
+     */
+    private final String keyComponent;
+
+    /**
+     * Creates a localizable attribute with the specified parameters.
+     *
+     * @param keyComponent the key component, used in building a localization key
+     */
+    private ConfigurationPropertyLocalizableAttribute(String keyComponent) {
+      this.keyComponent = keyComponent;
+    }
+
+    /**
+     * Returns the key component, used in building a localization key.
+     *
+     * @return the key component, used in building a localization key
+     */
+    public String getKeyComponent() {
+      return keyComponent;
+    }
+  }
+
+  /**
+   * Returns the configuration key.
    *
    * @return the configuration key
    */
   String getConfigKey();
 
   /**
-   * Whether the configuration property is required.
+   * Returns the type of the configuration property.
+   *
+   * @return the type of the configuration property
+   */
+  Type getType();
+
+  /**
+   * Returns whether the configuration property is required.
    *
    * @return whether the configuration property is required
    */
   boolean isRequired();
 
   /**
-   * The default value of the configuration property.
+   * Returns the widget used to display and edit values of the configuration property.
+   *
+   * @return the widget used to display and edit values of the configuration property
+   */
+  Widget getWidget();
+
+  /**
+   * Returns the default value of the configuration property.
    *
    * @return the default value of the configuration property
    */
   String getDefaultValue();
 
   /**
-   * The human-readable name of the configuration key for error messages.
+   * Returns the localized human-readable name of the configuration key for labels
+   * and error messages.
    *
-   * @return the human-readable name of the configuration key for error messages
+   * @param localizationContext the localization context
+   * @return the localized human-readable name of the configuration key for labels
+   * and error messages
    */
-  String getDescription(Locale locale);
+  String getName(LocalizationContext localizationContext);
 
   /**
-   * The human-readable error message for when a required configuration property is missing.
+   * Returns the localized human-readable description of the configuration property.
    *
-   * @return the human-readable error message for when a required configuration property is missing
+   * @param localizationContext the localization context
+   * @return the localized human-readable description of the configuration property
    */
-  String getMissingValueErrorMessage();
+  String getDescription(LocalizationContext localizationContext);
 
   /**
-   * Whether the configuration property contains sensitive information.
+   * Returns the localized human-readable error message for when a required configuration property
+   * is missing.
+   *
+   * @param localizationContext the localization context
+   * @return the localized human-readable error message for when a required configuration property
+   * is missing
+   */
+  String getMissingValueErrorMessage(LocalizationContext localizationContext);
+
+  /**
+   * Returns whether the configuration property contains sensitive information.
    *
    * @return whether the configuration property contains sensitive information
    */

@@ -15,9 +15,9 @@
 package com.cloudera.director.spi.v1.provider;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.LocalizationContext;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Metadata about a provider.
@@ -32,21 +32,29 @@ public interface ProviderMetadata {
   String getId();
 
   /**
-   * Returns the name of the provider, suitable for display in a drop-down menu of peer providers
-   * within the same scope.
+   * Returns a localization context for the provider with the specified parent context.
    *
-   * @param locale the locale
-   * @return the name of the provider
+   * @param parentContext the parent localization context
+   * @return a localization context for the provider with the specified parent context
    */
-  String getName(Locale locale);
+  LocalizationContext getLocalizationContext(LocalizationContext parentContext);
 
   /**
-   * Returns a human-readable description of the provider.
+   * Returns the localized name of the provider, suitable for display in a drop-down menu of peer
+   * providers within the same scope.
    *
-   * @param locale the locale
-   * @return a human-readable description of the provider
+   * @param localizationContext the localization context
+   * @return the name of the provider
    */
-  String getDescription(Locale locale);
+  String getName(LocalizationContext localizationContext);
+
+  /**
+   * Returns a localized human-readable description of the provider.
+   *
+   * @param localizationContext the localization context
+   * @return a localized human-readable description of the provider
+   */
+  String getDescription(LocalizationContext localizationContext);
 
   /**
    * Returns the list of configuration properties that can be given to configure the provider.
@@ -54,5 +62,4 @@ public interface ProviderMetadata {
    * @return the list of configuration properties that can be given to configure the provider
    */
   List<ConfigurationProperty> getProviderConfigurationProperties();
-
 }

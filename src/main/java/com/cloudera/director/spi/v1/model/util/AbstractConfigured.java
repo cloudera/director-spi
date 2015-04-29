@@ -17,6 +17,7 @@ package com.cloudera.director.spi.v1.model.util;
 import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.ConfigurationPropertyToken;
 import com.cloudera.director.spi.v1.model.Configured;
 
 import java.util.Map;
@@ -43,6 +44,11 @@ public abstract class AbstractConfigured implements Configured {
   @Override
   public Map<String, String> getConfiguration() {
     return configuration.getConfiguration();
+  }
+
+  @Override
+  public String getConfigurationValue(ConfigurationPropertyToken token) {
+    return configuration.getConfigurationValue(token);
   }
 
   @Override

@@ -14,16 +14,14 @@
 
 package com.cloudera.director.spi.v1.model.util;
 
-import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
-
 import com.cloudera.director.spi.v1.model.InstanceState;
 import com.cloudera.director.spi.v1.model.InstanceStatus;
 import com.cloudera.director.spi.v1.model.LocalizationContext;
 
 /**
- * A simple wrapper around {@code InstanceStatus} for instance state
+ * Abstract base class for instance state implementations.
  */
-public class SimpleInstanceState implements InstanceState {
+public class AbstractInstanceState<T> implements InstanceState {
 
   /**
    * The instance status.
@@ -31,12 +29,22 @@ public class SimpleInstanceState implements InstanceState {
   private final InstanceStatus instanceStatus;
 
   /**
+   * The provider-specific instance state details.
+   */
+  private final T instanceStateDetails;
+
+  /**
    * Creates an abstract instance state with the specified parameters.
    *
-   * @param instanceStatus the instance status
+   * @param instanceStatus       the instance status
+   * @param instanceStateDetails the provider-specific instance state details
    */
-  public SimpleInstanceState(InstanceStatus instanceStatus) {
-    this.instanceStatus = checkNotNull(instanceStatus, "instanceStatus is null");
+  public AbstractInstanceState(InstanceStatus instanceStatus, T instanceStateDetails) {
+    if (instanceStatus == null) {
+      throw new NullPointerException("instanceStatus is null");
+    }
+    this.instanceStatus = instanceStatus;
+    this.instanceStateDetails = instanceStateDetails;
   }
 
   @Override
@@ -45,14 +53,14 @@ public class SimpleInstanceState implements InstanceState {
   }
 
   @Override
-  // NOTE: This implementation does not do any actual localization, and simply calls toString()
-  // on the instance status details. Plugin implementers may override to perform localization.
-  public String getInstanceStateDescription(LocalizationContext localizationContext) {
-    return instanceStatus.toString();
+  public T unwrap() {
+    return instanceStateDetails;
   }
 
   @Override
-  public Object unwrap() {
-    return null;
+  // NOTE: This implementation does not do any actual localization, and simply calls toString()
+  // on the instance state details. Plugin implementors may override to perform localization.
+  public String getInstanceStateDescription(LocalizationContext localizationContext) {
+    return instanceStateDetails.toString();
   }
 }

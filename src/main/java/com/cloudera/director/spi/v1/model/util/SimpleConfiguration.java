@@ -16,11 +16,14 @@ package com.cloudera.director.spi.v1.model.util;
 
 import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
-import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.ConfigurationPropertyToken;
+import com.cloudera.director.spi.v1.model.Configured;
+import com.cloudera.director.spi.v1.model.LocalizationContext;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -47,7 +50,7 @@ public class SimpleConfiguration implements Configured {
    */
   public SimpleConfiguration(Map<String, String> configuration) {
     this.configuration = Collections.unmodifiableMap(new HashMap<String, String>(
-        checkNotNull(configuration, "configuration isn null")));
+        checkNotNull(configuration, "configuration is null")));
   }
 
   @Override
@@ -56,12 +59,19 @@ public class SimpleConfiguration implements Configured {
   }
 
   @Override
+  public String getConfigurationValue(ConfigurationPropertyToken token) {
+    return getConfigurationValue(token.unwrap());
+  }
+
+  @Override
   public String getConfigurationValue(ConfigurationProperty property) {
+    // TODO pass in as parameter
+    LocalizationContext localizationContext = new DefaultLocalizationContext(Locale.getDefault(), "");
     String configKey = property.getConfigKey();
     if (configuration.containsKey(configKey)) {
       return configuration.get(configKey);
     } else if (property.isRequired()) {
-      throw new IllegalArgumentException(property.getMissingValueErrorMessage());
+      throw new IllegalArgumentException(property.getMissingValueErrorMessage(localizationContext));
     }
 
     return property.getDefaultValue();

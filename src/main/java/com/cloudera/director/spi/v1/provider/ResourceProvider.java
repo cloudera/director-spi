@@ -59,10 +59,9 @@ public interface ResourceProvider
    * @param template    the resource template
    * @param resourceIds the unique identifiers for the resources
    * @param minCount    the minimum number of resources to allocate if not all resources can be allocated
-   * @return the resources, some or all of which may have <code>null</code> details if they are not fully ready for use
    * @throws InterruptedException if the operation is interrupted
    */
-  Collection<R> allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException;
+  void allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException;
 
   /**
    * Returns current resource information for the specified resources, which are guaranteed to have
@@ -82,7 +81,7 @@ public interface ResourceProvider
   /**
    * Permanently removes the specified resources, which are guaranteed to have been created by this provider.
    *
-   * @param template    the template that was used to create those resources
+   * @param template    the template used to create those resources
    * @param resourceIds the unique identifiers for the resources
    * @throws InterruptedException if the operation is interrupted
    */

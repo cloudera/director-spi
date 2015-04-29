@@ -12,21 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.compute;
-
-import com.cloudera.director.spi.v1.model.Instance;
+package com.cloudera.director.spi.v1.model;
 
 /**
- * Represents a cloud compute instance.
- *
- * @param <T> the type for the template for this instance
+ * Represents a configuration property. Used to simplify enum-based configuration property
+ * implementations.
  */
-public interface ComputeInstance<T extends ComputeInstanceTemplate> extends Instance<T> {
+public interface ConfigurationPropertyToken {
 
   /**
-   * Returns the virtualization type of the instance.
+   * Returns the configuration property.
    *
-   * @return the virtualization type of the instance
+   * @return the configuration property
    */
-  VirtualizationType getVirtualizationType();
+  ConfigurationProperty unwrap();
 }

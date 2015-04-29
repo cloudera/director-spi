@@ -12,31 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.provider.util;
+package com.cloudera.director.spi.v1.database.util;
 
-import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
-
+import com.cloudera.director.spi.v1.database.DatabaseServerProviderMetadata;
+import com.cloudera.director.spi.v1.database.DatabaseType;
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
 import com.cloudera.director.spi.v1.provider.ResourceProvider;
-import com.cloudera.director.spi.v1.provider.ResourceProviderMetadata;
+import com.cloudera.director.spi.v1.provider.util.SimpleResourceProviderMetadata;
+import com.cloudera.director.spi.v1.util.Preconditions;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Base class for resource provider metadata implementations.
+ * Base class for database server provider metadata implementations.
  */
-public class SimpleResourceProviderMetadata
-    extends AbstractProviderMetadata implements ResourceProviderMetadata {
+public class SimpleDatabaseServerProviderMetadata extends SimpleResourceProviderMetadata implements DatabaseServerProviderMetadata {
 
-  private Class<? extends ResourceProvider<?, ?>> providerClass;
-
-  private final List<ConfigurationProperty> resourceTemplateConfigurationProperties;
-
-  public static SimpleResourceProviderMetadataBuilder builder() {
-    return new SimpleResourceProviderMetadataBuilder();
+  /**
+   * Returns a builder.
+   *
+   * @return the builder
+   */
+  public static SimpleDatabaseServerProviderMetadataBuilder databaseServerProviderMetadataBuilder() {
+    return new SimpleDatabaseServerProviderMetadataBuilder();
   }
 
+  /**
+   * The set of supported database types.
+   */
+  private final Set<DatabaseType> supportedDatabaseTypes;
 
   /**
    * Creates an abstract resource provider metadata with the specified parameters.
@@ -48,27 +55,17 @@ public class SimpleResourceProviderMetadata
    * @param providerClass                           the resource provider class
    * @param providerConfigurationProperties         the list of configuration properties that can be given to configure the provider
    * @param resourceTemplateConfigurationProperties the list of configuration properties that can be given to configure
-   *                                                resources provided by the provider
    */
-  public SimpleResourceProviderMetadata(String id, String name, String description,
-      Class<? extends ResourceProvider<?, ?>> providerClass,
-      List<ConfigurationProperty> providerConfigurationProperties,
-      List<ConfigurationProperty> resourceTemplateConfigurationProperties) {
-    super(id, name, description, providerConfigurationProperties);
-
-    this.providerClass = checkNotNull(providerClass, "providerClass is null");
-    this.resourceTemplateConfigurationProperties = Collections.unmodifiableList(
-        checkNotNull(resourceTemplateConfigurationProperties,
-            "resourceTemplateConfigurationProperties is null"));
+  public SimpleDatabaseServerProviderMetadata(String id, String name, String description, Class<? extends ResourceProvider<?, ?>> providerClass,
+      List<ConfigurationProperty> providerConfigurationProperties, List<ConfigurationProperty> resourceTemplateConfigurationProperties,
+      Set<DatabaseType> supportedDatabaseTypes) {
+    super(id, name, description, providerClass, providerConfigurationProperties, resourceTemplateConfigurationProperties);
+    this.supportedDatabaseTypes = Collections.unmodifiableSet(
+        new HashSet<DatabaseType>(Preconditions.checkNotNull(supportedDatabaseTypes, "supportedDatabaseTypes is null")));
   }
 
   @Override
-  public Class<? extends ResourceProvider<?, ?>> getProviderClass() {
-    return providerClass;
-  }
-
-  @Override
-  public List<ConfigurationProperty> getResourceTemplateConfigurationProperties() {
-    return resourceTemplateConfigurationProperties;
+  public Set<DatabaseType> getSupportedDatabaseTypes() {
+    return supportedDatabaseTypes;
   }
 }

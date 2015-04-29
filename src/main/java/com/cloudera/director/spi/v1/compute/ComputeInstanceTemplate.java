@@ -15,13 +15,14 @@
 package com.cloudera.director.spi.v1.compute;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.ConfigurationPropertyToken;
 import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.InstanceTemplate;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
+import com.cloudera.director.spi.v1.model.util.SimpleConfigurationPropertyBuilder;
 import com.cloudera.director.spi.v1.util.ConfigurationPropertiesUtil;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -35,7 +36,7 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
   private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
       ConfigurationPropertiesUtil.merge(
           InstanceTemplate.getConfigurationProperties(),
-          ConfigurationPropertiesUtil.asList(ComputeInstanceTemplateConfigurationProperty.values())
+          ConfigurationPropertiesUtil.asConfigurationPropertyList(ComputeInstanceTemplateConfigurationPropertyToken.values())
       );
 
   /**
@@ -50,91 +51,51 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
   }
 
   /**
-   * Instance configuration properties.
+   * Compute instance configuration properties.
    */
-  public static enum ComputeInstanceTemplateConfigurationProperty implements ConfigurationProperty {
+  public static enum ComputeInstanceTemplateConfigurationPropertyToken implements ConfigurationPropertyToken {
 
     /**
      * The provider-specific image ID.
      */
-    IMAGE("image", true, null, "The image ID.", "Image is mandatory"),
+    IMAGE(new SimpleConfigurationPropertyBuilder()
+        .configKey("image")
+        .name("Image ID")
+        .required(true)
+        .widget(ConfigurationProperty.Widget.OPENLIST)
+        .defaultDescription("The image ID.")
+        .defaultErrorMessage("Image is mandatory")
+        .build()),
 
     /**
      * The provider-specific instance type.
      */
-    TYPE("type", true, null, "The instance type.", "Instance type is mandatory");
+    TYPE(new SimpleConfigurationPropertyBuilder()
+        .configKey("type")
+        .name("Type")
+        .required(true)
+        .widget(ConfigurationProperty.Widget.OPENLIST)
+        .defaultDescription("The instance type.")
+        .defaultErrorMessage("Instance type is mandatory")
+        .build());
 
     /**
-     * Creates a configuration property with the specified parameters.
+     * The configuration property.
+     */
+    private ConfigurationProperty configurationProperty;
+
+    /**
+     * Creates a configuration property token with the specified parameters.
      *
-     * @param configKey    the configuration key
-     * @param required     whether the configuration property is required
-     * @param defaultValue the default value of the configuration property
-     * @param description  the human-readable description of the configuration property
-     * @param errorMessage the human-readable error message for when a required configuration property is missing
+     * @param configurationProperty the configuration property
      */
-    private ComputeInstanceTemplateConfigurationProperty(String configKey, boolean required,
-        String defaultValue, String description, String errorMessage) {
-      this.configKey = configKey;
-      this.required = required;
-      this.defaultValue = defaultValue;
-      this.description = description;
-      this.errorMessage = errorMessage;
-    }
-
-    /**
-     * The configuration key.
-     */
-    private final String configKey;
-
-    /**
-     * Whether the configuration property is required.
-     */
-    private final boolean required;
-
-    /**
-     * The default value of the configuration property.
-     */
-    private final String defaultValue;
-
-    /**
-     * The human-readable description of the configuration property.
-     */
-    private final String description;
-
-    /**
-     * The human-readable error message for when a required configuration property is missing.
-     */
-    private final String errorMessage;
-
-    @Override
-    public String getConfigKey() {
-      return configKey;
+    private ComputeInstanceTemplateConfigurationPropertyToken(ConfigurationProperty configurationProperty) {
+      this.configurationProperty = configurationProperty;
     }
 
     @Override
-    public boolean isRequired() {
-      return required;
-    }
-
-    @Override
-    public String getDefaultValue() {
-      return defaultValue;
-    }
-
-    @Override
-    public String getDescription(Locale locale) {
-      return description;
-    }
-
-    @Override
-    public String getMissingValueErrorMessage() {
-      return errorMessage;
-    }
-
-    @Override
-    public boolean isSensitive() {
-      return false;
+    public ConfigurationProperty unwrap() {
+      return configurationProperty;
     }
   }
 

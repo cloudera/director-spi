@@ -19,8 +19,8 @@ public interface CloudProvider {
   /**
    * Returns the specified resource provider, using the specified configuration
    *
-   * @param resourceProviderId    the resource provider ID, as returned by its metadata
-   * @param configuration the configuration
+   * @param resourceProviderId the resource provider ID, as returned by its metadata
+   * @param configuration      the configuration
    * @return the specified resource provider, using the specified configuration
    * @throws java.util.NoSuchElementException if the cloud provider does not have a
    *                                          resource provider with the specified ID

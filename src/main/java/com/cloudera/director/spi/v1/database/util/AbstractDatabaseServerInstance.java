@@ -24,9 +24,10 @@ import java.net.InetAddress;
  * Abstract base class for database server instance implementations.
  *
  * @param <T> the type of database server instance template from which database server instances are constructed
+ * @param <D> the type of instance details
  */
-public abstract class AbstractDatabaseServerInstance<T extends DatabaseServerInstanceTemplate>
-    extends AbstractInstance<T> implements DatabaseServerInstance<T> {
+public abstract class AbstractDatabaseServerInstance<T extends DatabaseServerInstanceTemplate, D>
+    extends AbstractInstance<T, D> implements DatabaseServerInstance<T> {
 
   /**
    * The resource type representing a database server instance.
@@ -34,14 +35,33 @@ public abstract class AbstractDatabaseServerInstance<T extends DatabaseServerIns
   public static final Type TYPE = new ResourceType("DatabaseServerInstance");
 
   /**
+   * The port for administrative database connections.
+   */
+  private Integer port;
+
+  /**
    * Creates an abstract database server instance with the specified parameters.
    *
    * @param template         the template from which the instance was created
    * @param instanceId       the instance identifier
    * @param privateIpAddress the private IP address of this instance
+   * @param port             the port for administrative database connections
    */
-  protected AbstractDatabaseServerInstance(T template, String instanceId, InetAddress privateIpAddress) {
-    super(template, instanceId, privateIpAddress);
+  protected AbstractDatabaseServerInstance(T template, String instanceId, InetAddress privateIpAddress, Integer port) {
+    this(template, instanceId, privateIpAddress, port, null);
+  }
+
+  /**
+   * Creates an abstract database server instance with the specified parameters.
+   *
+   * @param template         the template from which the instance was created
+   * @param instanceId       the instance identifier
+   * @param privateIpAddress the private IP address of this instance
+   * @param details          the provider-specific instance details
+   */
+  protected AbstractDatabaseServerInstance(T template, String instanceId, InetAddress privateIpAddress, Integer port, D details) {
+    super(template, instanceId, privateIpAddress, details);
+    this.port = port;
   }
 
   @Override
@@ -49,4 +69,17 @@ public abstract class AbstractDatabaseServerInstance<T extends DatabaseServerIns
     return TYPE;
   }
 
+  @Override
+  public Integer getPort() {
+    return port;
+  }
+
+  /**
+   * Sets the port for administrative database connections.
+   *
+   * @param port the port for administrative database connections
+   */
+  protected void setPort(Integer port) {
+    this.port = port;
+  }
 }

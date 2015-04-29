@@ -14,14 +14,17 @@
 
 package com.cloudera.director.spi.v1.provider.util;
 
+import static com.cloudera.director.spi.v1.model.CommonLocalizableAttribute.DESCRIPTION;
+import static com.cloudera.director.spi.v1.model.CommonLocalizableAttribute.NAME;
 import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.LocalizationContext;
+import com.cloudera.director.spi.v1.model.util.ChildLocalizationContext;
 import com.cloudera.director.spi.v1.provider.ProviderMetadata;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Base class for provider metadata implementations.
@@ -53,10 +56,11 @@ public abstract class AbstractProviderMetadata implements ProviderMetadata {
    * Creates an abstract provider metadata with the specified parameters.
    *
    * @param id                              the unique identifier of the provider within its scope
-   * @param name                            the name of the provider, suitable for display in a drop-down menu of peer providers
-   *                                        within the same scope
+   * @param name                            the name of the provider, suitable for display in a
+   *                                        drop-down menu of peer providers within the same scope
    * @param description                     the human-readable description of the provider
-   * @param providerConfigurationProperties the list of configuration properties that can be given to configure the provider
+   * @param providerConfigurationProperties the list of configuration properties that can be given
+   *                                        to configure the provider
    */
   public AbstractProviderMetadata(String id, String name, String description,
       List<ConfigurationProperty> providerConfigurationProperties) {
@@ -73,15 +77,24 @@ public abstract class AbstractProviderMetadata implements ProviderMetadata {
   }
 
   @Override
-  public String getName(Locale locale) {
-    return name;
+  public LocalizationContext getLocalizationContext(LocalizationContext parentContext) {
+    return new ChildLocalizationContext(parentContext, id);
   }
 
   @Override
-  // NOTE: This implementation does not do any actual localization, and simply returns the fixed description.
-  // Plugin implementers may override to perform localization.
-  public String getDescription(Locale locale) {
-    return description;
+  public String getName(LocalizationContext localizationContext) {
+    return (localizationContext == null) ? name : localizationContext.localize(
+        name,
+        NAME.getKeyComponent()
+    );
+  }
+
+  @Override
+  public String getDescription(LocalizationContext localizationContext) {
+    return (localizationContext == null) ? description : localizationContext.localize(
+        description,
+        DESCRIPTION.getKeyComponent()
+    );
   }
 
   @Override

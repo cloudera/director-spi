@@ -24,9 +24,9 @@ import java.util.List;
  * <p/>
  * <p>This class provides the entry point from Cloudera Director to the cloud provider plugin implementation.
  * The plugin must be packaged as a single jar whose manifest includes the properties
- * <code>com.cloudera.director.provider.launcher-class</code> whose value is the fully-qualified name of a
+ * <code>Cloudera-Director-Launcher-Class</code> whose value is the fully-qualified name of a
  * class which implements this interface and has a no-argument public constructor, and
- * <code>com.cloudera.director.provider.spi-version</code>, whose value is the supported SPI version (<em>e.g.</em> v1).
+ * <code>Cloudera-Director-SPI-Version</code>, whose value is the supported SPI version (<em>e.g.</em> v1).
  * Cloudera Director instantiates the class via reflection and invokes the {@link #initialize(java.io.File)} method
  * before requesting any providers.</p>
  */
@@ -50,8 +50,8 @@ public interface Launcher {
   /**
    * Returns the specified cloud provider, using the specified configuration.
    *
-   * @param cloudProviderId    the cloud provider ID, as returned by its metadata
-   * @param configuration the configuration
+   * @param cloudProviderId the cloud provider ID, as returned by its metadata
+   * @param configuration   the configuration
    * @return the specified cloud provider, using the specified configuration
    * if it has not already been initialized
    */

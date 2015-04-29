@@ -14,8 +14,6 @@
 
 package com.cloudera.director.spi.v1.model;
 
-import java.util.Locale;
-
 /**
  * Describes the last known state of an instance.
  */
@@ -29,12 +27,12 @@ public interface InstanceState {
   InstanceStatus getInstanceStatus();
 
   /**
-   * Returns a human-readable version of the instance state.
+   * Returns a localized human-readable version of the instance state.
    *
-   * @param locale the locale
-   * @return a human-readable version of the instance state
+   * @param localizationContext the localization context
+   * @return a localized human-readable version of the instance state
    */
-  String getInstanceStateDescription(Locale locale);
+  String getInstanceStateDescription(LocalizationContext localizationContext);
 
   /**
    * Return the provider specific version of this state object or null

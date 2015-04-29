@@ -23,4 +23,11 @@ import com.cloudera.director.spi.v1.model.Instance;
  */
 public interface DatabaseServerInstance<T extends DatabaseServerInstanceTemplate>
     extends Instance<T> {
+
+  /**
+   * Returns the port for administrative database connections.
+   *
+   * @return the port for administrative database connections
+   */
+  Integer getPort();
 }

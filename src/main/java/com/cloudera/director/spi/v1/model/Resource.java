@@ -14,7 +14,6 @@
 
 package com.cloudera.director.spi.v1.model;
 
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -28,12 +27,12 @@ public interface Resource<T extends ResourceTemplate> {
   interface Type {
 
     /**
-     * Returns a human-readable description of the resource type.
+     * Returns a localized human-readable description of the resource type.
      *
-     * @param locale the locale
-     * @return a human-readable description of the resource type
+     * @param localizationContext the localization context
+     * @return a loczlized human-readable description of the resource type
      */
-    String getDescription(Locale locale);
+    String getDescription(LocalizationContext localizationContext);
   }
 
   /**
@@ -58,12 +57,12 @@ public interface Resource<T extends ResourceTemplate> {
   String getId();
 
   /**
-   * Returns a human-readable description of the resource.
+   * Returns a localized human-readable description of the resource.
    *
-   * @param locale the locale
-   * @return a human-readable description of the resource
+   * @param localizationContext the localization context
+   * @return a localized human-readable description of the resource
    */
-  String getDescription(Locale locale);
+  String getDescription(LocalizationContext localizationContext);
 
   /**
    * Returns a map representing the properties of the resource.

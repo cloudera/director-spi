@@ -28,9 +28,9 @@ public interface InstanceProvider<I extends Instance<T>, T extends InstanceTempl
     extends ResourceProvider<I, T> {
 
   /**
-   * Returns a map from instance identifiers to instance state for the specified batch of instances.
+   * Returns a map from instance identifiers to instance state for the specified instances.
    *
-   * @param template    the template that was used to create those resources
+   * @param template    the resource template used for create the instances
    * @param instanceIds the unique identifiers for the instances
    * @return the map from instance identifiers to instance state for the specified batch of instances
    */

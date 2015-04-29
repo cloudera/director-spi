@@ -14,19 +14,23 @@
 
 package com.cloudera.director.spi.v1.compute;
 
-import com.cloudera.director.spi.v1.model.Instance;
-
 /**
- * Represents a cloud compute instance.
- *
- * @param <T> the type for the template for this instance
+ * The type of virtualization technology a cloud provider is using.
  */
-public interface ComputeInstance<T extends ComputeInstanceTemplate> extends Instance<T> {
+public enum VirtualizationType {
 
   /**
-   * Returns the virtualization type of the instance.
-   *
-   * @return the virtualization type of the instance
+   * Paravirtualization.
    */
-  VirtualizationType getVirtualizationType();
+  PARAVIRTUALIZATION,
+
+  /**
+   * Hardware-assisted virtualization.
+   */
+  HARDWARE_ASSISTED,
+
+  /**
+   * Unable to detect virtualization type.
+   */
+  UNKNOWN
 }

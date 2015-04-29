@@ -32,6 +32,17 @@ public interface Configured {
    * Returns the value of the specified configuration property, or the default value if the value is not present
    * and the configuration property is optional.
    *
+   * @param token the configuration property token
+   * @return the value of the specified configuration property, or the default value if the value is not present
+   * and the configuration property is optional
+   * @throws IllegalArgumentException if the specified configuration property is not present and required
+   */
+  String getConfigurationValue(ConfigurationPropertyToken token);
+
+  /**
+   * Returns the value of the specified configuration property, or the default value if the value is not present
+   * and the configuration property is optional.
+   *
    * @param property the configuration property
    * @return the value of the specified configuration property, or the default value if the value is not present
    * and the configuration property is optional

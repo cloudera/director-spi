@@ -15,9 +15,12 @@
 package com.cloudera.director.spi.v1.database;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.model.ConfigurationPropertyToken;
 import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.InstanceTemplate;
 import com.cloudera.director.spi.v1.model.ResourceTemplate;
+import com.cloudera.director.spi.v1.model.util.SimpleConfigurationPropertyBuilder;
+import com.cloudera.director.spi.v1.util.ConfigurationPropertiesUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +34,10 @@ public class DatabaseServerInstanceTemplate extends InstanceTemplate {
    * The list of configuration properties (including inherited properties).
    */
   private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
-      InstanceTemplate.getConfigurationProperties();
+      ConfigurationPropertiesUtil.merge(
+          InstanceTemplate.getConfigurationProperties(),
+          ConfigurationPropertiesUtil.asConfigurationPropertyList(DatabaseServerInstanceTemplateConfigurationPropertyToken.values())
+      );
 
   /**
    * Returns the list of configuration properties for creating a compute instance template,
@@ -43,6 +49,81 @@ public class DatabaseServerInstanceTemplate extends InstanceTemplate {
   public static List<ConfigurationProperty> getConfigurationProperties() {
     return CONFIGURATION_PROPERTIES;
   }
+
+  /**
+   * Database server instance template configuration properties.
+   */
+  public static enum DatabaseServerInstanceTemplateConfigurationPropertyToken implements ConfigurationPropertyToken {
+
+    /**
+     * Database type.
+     */
+    TYPE(new SimpleConfigurationPropertyBuilder()
+        .configKey("type")
+        .name("Type")
+        .required(true)
+        .widget(ConfigurationProperty.Widget.OPENLIST)
+        .defaultDescription("The database type.")
+        .defaultErrorMessage("Database type is mandatory")
+        .build()),
+
+    /**
+     * Admin username.
+     */
+    ADMIN_USERNAME(new SimpleConfigurationPropertyBuilder()
+        .configKey("adminUsername")
+        .name("Admin username")
+        .required(true)
+        .defaultDescription("The admin user name.")
+        .defaultErrorMessage("Admin username is mandatory")
+        .build()),
+
+    /**
+     * Admin password.
+     */
+    ADMIN_PASSWORD(new SimpleConfigurationPropertyBuilder()
+        .configKey("adminPassword")
+        .name("Admin password")
+        .required(true)
+        .widget(ConfigurationProperty.Widget.PASSWORD)
+        .defaultDescription("The admin password.")
+        .defaultErrorMessage("Admin password is mandatory")
+        .build());
+
+    /**
+     * The configuration property.
+     */
+    private final ConfigurationProperty configurationProperty;
+
+    /**
+     * Creates a configuration property token with the specified parameters.
+     *
+     * @param configurationProperty the configuration property
+     */
+    private DatabaseServerInstanceTemplateConfigurationPropertyToken(ConfigurationProperty configurationProperty) {
+      this.configurationProperty = configurationProperty;
+    }
+
+    @Override
+    public ConfigurationProperty unwrap() {
+      return configurationProperty;
+    }
+  }
+
+  /**
+   * The database type.
+   */
+  private final DatabaseType databaseType;
+
+  /**
+   * The admin username.
+   */
+  private final String adminUser;
+
+  /**
+   * The admin password.
+   */
+  private final String adminPassword;
 
   /**
    * Creates a database server instance template from the specified resource template.
@@ -63,5 +144,35 @@ public class DatabaseServerInstanceTemplate extends InstanceTemplate {
    */
   public DatabaseServerInstanceTemplate(String name, Configured configuration, Map<String, String> tags) {
     super(name, configuration, tags);
+    this.databaseType = DatabaseType.valueOf(configuration.getConfigurationValue(DatabaseServerInstanceTemplateConfigurationPropertyToken.TYPE));
+    this.adminUser = configuration.getConfigurationValue(DatabaseServerInstanceTemplateConfigurationPropertyToken.ADMIN_USERNAME);
+    this.adminPassword = configuration.getConfigurationValue(DatabaseServerInstanceTemplateConfigurationPropertyToken.ADMIN_PASSWORD);
+  }
+
+  /**
+   * Returns the database type.
+   *
+   * @return the database type
+   */
+  public DatabaseType getDatabaseType() {
+    return databaseType;
+  }
+
+  /**
+   * Returns the admin username.
+   *
+   * @return the admin username
+   */
+  public String getAdminUser() {
+    return adminUser;
+  }
+
+  /**
+   * Returns the admin password.
+   *
+   * @return the admin password
+   */
+  public String getAdminPassword() {
+    return adminPassword;
   }
 }

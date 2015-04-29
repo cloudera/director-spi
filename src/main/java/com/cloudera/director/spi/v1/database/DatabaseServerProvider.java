@@ -22,5 +22,4 @@ import com.cloudera.director.spi.v1.provider.InstanceProvider;
 public interface DatabaseServerProvider
     <R extends DatabaseServerInstance<T>, T extends DatabaseServerInstanceTemplate>
     extends InstanceProvider<R, T> {
-
 }

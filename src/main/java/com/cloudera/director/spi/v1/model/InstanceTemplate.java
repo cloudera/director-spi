@@ -14,13 +14,13 @@
 
 package com.cloudera.director.spi.v1.model;
 
-import static com.cloudera.director.spi.v1.model.InstanceTemplate.InstanceTemplateConfigurationProperty.INSTANCE_NAME_PREFIX;
+import static com.cloudera.director.spi.v1.model.InstanceTemplate.InstanceTemplateConfigurationPropertyToken.INSTANCE_NAME_PREFIX;
 
+import com.cloudera.director.spi.v1.model.util.SimpleConfigurationPropertyBuilder;
 import com.cloudera.director.spi.v1.model.util.SimpleResourceTemplate;
 import com.cloudera.director.spi.v1.util.ConfigurationPropertiesUtil;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -34,7 +34,8 @@ public class InstanceTemplate extends SimpleResourceTemplate {
   private static final List<ConfigurationProperty> CONFIGURATION_PROPERTIES =
       ConfigurationPropertiesUtil.merge(
           SimpleResourceTemplate.getConfigurationProperties(),
-          ConfigurationPropertiesUtil.asList(InstanceTemplateConfigurationProperty.values())
+          ConfigurationPropertiesUtil.asConfigurationPropertyList(
+              InstanceTemplateConfigurationPropertyToken.values())
       );
 
   /**
@@ -49,87 +50,37 @@ public class InstanceTemplate extends SimpleResourceTemplate {
   }
 
   /**
-   * Instance configuration properties.
+   * Instance template configuration property tokens.
    */
-  public static enum InstanceTemplateConfigurationProperty implements ConfigurationProperty {
+  public static enum InstanceTemplateConfigurationPropertyToken implements ConfigurationPropertyToken {
 
     /**
      * String to use as prefix for instance names.
      */
-    INSTANCE_NAME_PREFIX("instanceNamePrefix", false, "director",
-        "The string to use as a prefix for instance names.", null);
+    INSTANCE_NAME_PREFIX(new SimpleConfigurationPropertyBuilder()
+        .configKey("instanceNamePrefix")
+        .name("Instance name prefix")
+        .defaultValue("director")
+        .defaultDescription("The string to use as a prefix for instance names.")
+        .build());
 
     /**
-     * Creates a configuration property with the specified parameters.
+     * The configuration property.
+     */
+    private final ConfigurationProperty configurationProperty;
+
+    /**
+     * Creates a configuration property token with the specified parameters.
      *
-     * @param configKey    the configuration key
-     * @param required     whether the configuration property is required
-     * @param defaultValue the default value of the configuration property
-     * @param description  the human-readable description of the configuration property
-     * @param errorMessage the human-readable error message for when a required configuration property is missing
+     * @param configurationProperty the configuration property
      */
-    private InstanceTemplateConfigurationProperty(String configKey, boolean required,
-        String defaultValue, String description, String errorMessage) {
-      this.configKey = configKey;
-      this.required = required;
-      this.defaultValue = defaultValue;
-      this.description = description;
-      this.errorMessage = errorMessage;
-    }
-
-    /**
-     * The configuration key.
-     */
-    private final String configKey;
-
-    /**
-     * Whether the configuration property is required.
-     */
-    private final boolean required;
-
-    /**
-     * The default value of the configuration property.
-     */
-    private final String defaultValue;
-
-    /**
-     * The human-readable description of the configuration property.
-     */
-    private final String description;
-
-    /**
-     * The human-readable error message for when a required configuration property is missing.
-     */
-    private final String errorMessage;
-
-    @Override
-    public String getConfigKey() {
-      return configKey;
+    private InstanceTemplateConfigurationPropertyToken(ConfigurationProperty configurationProperty) {
+      this.configurationProperty = configurationProperty;
     }
 
     @Override
-    public boolean isRequired() {
-      return required;
-    }
-
-    @Override
-    public String getDefaultValue() {
-      return defaultValue;
-    }
-
-    @Override
-    public String getDescription(Locale locale) {
-      return description;
-    }
-
-    @Override
-    public String getMissingValueErrorMessage() {
-      return errorMessage;
-    }
-
-    @Override
-    public boolean isSensitive() {
-      return false;
+    public ConfigurationProperty unwrap() {
+      return configurationProperty;
     }
   }
 

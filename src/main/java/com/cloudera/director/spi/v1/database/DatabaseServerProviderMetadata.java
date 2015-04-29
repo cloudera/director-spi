@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.compute;
+package com.cloudera.director.spi.v1.database;
 
-import com.cloudera.director.spi.v1.model.Instance;
+import com.cloudera.director.spi.v1.provider.ResourceProviderMetadata;
+
+import java.util.Set;
 
 /**
- * Represents a cloud compute instance.
- *
- * @param <T> the type for the template for this instance
+ * Provider metadata about a database server resource provider.
  */
-public interface ComputeInstance<T extends ComputeInstanceTemplate> extends Instance<T> {
+public interface DatabaseServerProviderMetadata extends ResourceProviderMetadata {
 
   /**
-   * Returns the virtualization type of the instance.
+   * Returns the set of supported database types.
    *
-   * @return the virtualization type of the instance
+   * @return the set of supported database types
    */
-  VirtualizationType getVirtualizationType();
+  Set<DatabaseType> getSupportedDatabaseTypes();
 }

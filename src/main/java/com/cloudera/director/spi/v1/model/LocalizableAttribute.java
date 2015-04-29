@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.cloudera.director.spi.v1.compute;
-
-import com.cloudera.director.spi.v1.model.Instance;
+package com.cloudera.director.spi.v1.model;
 
 /**
- * Represents a cloud compute instance.
- *
- * @param <T> the type for the template for this instance
+ * Represents an attribute that can be localized.
  */
-public interface ComputeInstance<T extends ComputeInstanceTemplate> extends Instance<T> {
+public interface LocalizableAttribute {
 
   /**
-   * Returns the virtualization type of the instance.
+   * Returns the key component, used in building a localization key.
    *
-   * @return the virtualization type of the instance
+   * @return the key component, used in building a localization key
    */
-  VirtualizationType getVirtualizationType();
+  String getKeyComponent();
 }

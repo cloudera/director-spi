@@ -14,47 +14,23 @@
 package com.cloudera.director.spi.v1.provider.util;
 
 import com.cloudera.director.spi.v1.model.ConfigurationProperty;
+import com.cloudera.director.spi.v1.provider.ResourceProvider;
 
 import java.util.List;
 
-public class SimpleResourceProviderMetadataBuilder {
+public class SimpleResourceProviderMetadataBuilder extends AbstractResourceProviderMetadataBuilder<SimpleResourceProviderMetadataBuilder, SimpleResourceProviderMetadata> {
 
-  private String id;
-  private String name;
-  private String description;
-  private List<ConfigurationProperty> providerConfigurationProperties;
-  private List<ConfigurationProperty> resourceTemplateConfigurationProperties;
-
-
-  public SimpleResourceProviderMetadataBuilder id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  public SimpleResourceProviderMetadataBuilder name(String name) {
-    this.name = name;
-    return this;
-  }
-
-  public SimpleResourceProviderMetadataBuilder description(String description) {
-    this.description = description;
-    return this;
-  }
-
-  public SimpleResourceProviderMetadataBuilder providerConfigurationProperties(
-      List<ConfigurationProperty> providerConfigurationProperties) {
-    this.providerConfigurationProperties = providerConfigurationProperties;
-    return this;
-  }
-
-  public SimpleResourceProviderMetadataBuilder resourceTemplateConfigurationProperties(
+  @Override
+  protected SimpleResourceProviderMetadata build(String id, String name, String description,
+      Class<? extends ResourceProvider<?, ?>> providerClass,
+      List<ConfigurationProperty> providerConfigurationProperties,
       List<ConfigurationProperty> resourceTemplateConfigurationProperties) {
-    this.resourceTemplateConfigurationProperties = resourceTemplateConfigurationProperties;
-    return this;
+    return new SimpleResourceProviderMetadata(id, name, description, providerClass,
+        providerConfigurationProperties, resourceTemplateConfigurationProperties);
   }
 
-  public SimpleResourceProviderMetadata build() {
-    return new SimpleResourceProviderMetadata(id, name, description,
-        providerConfigurationProperties, resourceTemplateConfigurationProperties);
+  @Override
+  protected SimpleResourceProviderMetadataBuilder getThis() {
+    return this;
   }
 }
