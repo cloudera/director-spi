@@ -176,7 +176,7 @@ public abstract class AbstractConfigurationProperty implements ConfigurationProp
 
   @Override
   public String getName(LocalizationContext localizationContext) {
-    String name = getDefaultDescription();
+    String name = getName();
     return (localizationContext == null) ? name : localizationContext.localize(
         name,
         getConfigKey(),
