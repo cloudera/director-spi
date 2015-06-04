@@ -1,0 +1,11 @@
+com.cloudera.director.spi.v1.common.http
+com.cloudera.director.spi.v1.compute
+com.cloudera.director.spi.v1.compute.util
+com.cloudera.director.spi.v1.database
+com.cloudera.director.spi.v1.database.util
+com.cloudera.director.spi.v1.model
+com.cloudera.director.spi.v1.model.exception
+com.cloudera.director.spi.v1.model.util
+com.cloudera.director.spi.v1.provider
+com.cloudera.director.spi.v1.provider.util
+com.cloudera.director.spi.v1.util
