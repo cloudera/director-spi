@@ -95,16 +95,15 @@
 <br>
 <pre>public interface <span class="strong">Launcher</span></pre>
 <div class="block"><p>Cloud provider plugin launcher.</p>
- <p/>
  <p>This class provides the entry point from Cloudera Director to the cloud provider plugin
- implementation.
- The plugin must be packaged as a single jar whose manifest includes the properties
- <code>Cloudera-Director-Launcher-Class</code> whose value is the fully-qualified name of a
- class which implements this interface and has a no-argument public constructor, and
- <code>Cloudera-Director-SPI-Version</code>, whose value is the supported SPI version
- (<em>e.g.</em> v1).
- Cloudera Director instantiates the class via reflection and invokes the
- <a href="../../../../../../com/cloudera/director/spi/v1/provider/Launcher.html#initialize(java.io.File,%20com.cloudera.director.spi.v1.common.http.HttpProxyParameters)"><code>initialize(File, HttpProxyParameters)</code></a> method before requesting any providers.</p></div>
+ implementation.</p>
+ <p>The plugin must be packaged as a single jar, with a provider-configuration file
+ <code>META-INF/services/com.cloudera.director.spi.v1.provider.Launcher</code> containing
+ the fully-qualified name of a class which implements this interface and has a no-argument
+ public constructor.</p>
+ <p>Cloudera Director uses Java's service loading mechanism to instantiate the class via
+ reflection, then invokes the <a href="../../../../../../com/cloudera/director/spi/v1/provider/Launcher.html#initialize(java.io.File,%20com.cloudera.director.spi.v1.common.http.HttpProxyParameters)"><code>initialize(File, HttpProxyParameters)</code></a> method before
+ requesting any providers.</p></div>
 </li>
 </ul>
 </div>
