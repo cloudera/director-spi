@@ -33,7 +33,7 @@
         <maven-checkstyle-plugin.version>2.13</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-        <maven-findbugs-plugin.version>2.5.5</maven-findbugs-plugin.version>
+        <findbugs-maven-plugin.version>3.0.3</findbugs-maven-plugin.version>
         <maven-pmd-plugin.version>3.2</maven-pmd-plugin.version>
     </properties>
 
@@ -112,7 +112,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${maven-findbugs-plugin.version}</version>
+                <version>${findbugs-maven-plugin.version}</version>
                 <configuration>
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                     <failOnError>false</failOnError>

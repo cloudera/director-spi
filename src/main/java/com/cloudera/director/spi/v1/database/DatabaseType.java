@@ -3,7 +3,7 @@
 package com.cloudera.director.spi.v1.database;
 
 /**
- * Database types supported by Cloudera Manager and CDH components
+ * Database types supported by Cloudera Manager and CDH components.
  *
  * @see <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_installing_configuring_dbs.html" />
  */

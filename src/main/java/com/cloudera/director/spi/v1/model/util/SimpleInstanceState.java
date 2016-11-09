@@ -21,7 +21,7 @@ import com.cloudera.director.spi.v1.model.InstanceStatus;
 import com.cloudera.director.spi.v1.model.LocalizationContext;
 
 /**
- * A simple wrapper around {@code InstanceStatus} for instance state
+ * A simple wrapper around {@code InstanceStatus} for instance state.
  */
 public class SimpleInstanceState implements InstanceState {
 

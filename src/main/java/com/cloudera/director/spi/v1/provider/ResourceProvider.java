@@ -71,7 +71,7 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
       PluginExceptionConditionAccumulator accumulator);
 
   /**
-   * Create a new resource template instance for this provider using the configuration
+   * Create a new resource template instance for this provider using the configuration.
    *
    * @param name          the name of the template
    * @param configuration the configuration

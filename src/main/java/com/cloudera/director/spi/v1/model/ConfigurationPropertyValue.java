@@ -25,7 +25,7 @@ public interface ConfigurationPropertyValue {
   String getValue();
 
   /**
-   * The human-readable localized label for the configuration property value
+   * Returns the human-readable localized label for the configuration property value.
    */
   String getLabel();
 }

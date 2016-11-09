@@ -52,7 +52,7 @@ public interface CloudProvider {
       PluginExceptionConditionAccumulator accumulator);
 
   /**
-   * Returns the specified resource provider, using the specified configuration
+   * Returns the specified resource provider, using the specified configuration.
    *
    * @param resourceProviderId the resource provider ID, as returned by its metadata
    * @param configuration      the configuration

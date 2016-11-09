@@ -63,8 +63,8 @@ public class InstanceTemplate extends SimpleResourceTemplate {
         .configKey("instanceNamePrefix")
         .name("Instance name prefix")
         .defaultValue("director")
-        .defaultDescription("Prefix that Cloudera Director should use when naming the instances"
-            + " (this is not part of the hostname)")
+        .defaultDescription("Prefix used when generating instance names in AWS"
+            + " (not part of the hostname).")
         .build());
 
     /**
