@@ -274,7 +274,7 @@ In addition to unit tests provided by the plugin author, an open-source [Directo
 
 ### Installing the plugin
 
-Detailed information about plugin installation is part of the Cloudera Director documentation. This section contains only an overview, and concentrates on information of interest to plugin authors.
+Detailed information about plugin installation, and about the plugins that come pre-installed, is part of the Cloudera Director documentation. This section contains only an overview, and concentrates on information of interest to plugin authors.
 
 Cloudera Director contains a directory for plugins. The user creates a subdirectory for each plugin. This subdirectory contains the plugin jar and an `etc` directory for additional filesystem-based plugin configuration information. Cloudera Director will create an empty `etc` directory if it is absent.
 
