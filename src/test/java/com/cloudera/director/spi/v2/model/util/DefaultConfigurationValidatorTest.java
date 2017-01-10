@@ -42,7 +42,7 @@ public class DefaultConfigurationValidatorTest {
   }
 
   private static ConfigurationProperty buildMockConfigurationProperty(String configKey,
-      boolean required) {
+                                                                      boolean required) {
     ConfigurationProperty configurationProperty = mock(ConfigurationProperty.class);
     when(configurationProperty.getConfigKey()).thenReturn(configKey);
     when(configurationProperty.isRequired()).thenReturn(required);

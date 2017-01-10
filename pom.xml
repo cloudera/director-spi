@@ -27,9 +27,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <director-spi-v1.version>1.0.0</director-spi-v1.version>
         <assertj.version>1.6.0</assertj.version>
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
+        <guava.version>20.0</guava.version>
         <maven-checkstyle-plugin.version>2.13</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
@@ -38,6 +40,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.cloudera.director</groupId>
+            <artifactId>director-spi-v1</artifactId>
+            <version>${director-spi-v1.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Test dependencies below -->
         <dependency>
             <groupId>junit</groupId>
@@ -57,6 +66,13 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
             <scope>test</scope>
         </dependency>
 
