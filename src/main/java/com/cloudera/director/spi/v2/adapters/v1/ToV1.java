@@ -207,7 +207,7 @@ public class ToV1 {
       @Override
       public void validate(String name,
           com.cloudera.director.spi.v1.model.Configured configuration,
-          com.cloudera.director.spi.v1.model.exception.PluginExceptionConditionAccumulator accumulator,
+          PluginExceptionConditionAccumulator accumulator,
           com.cloudera.director.spi.v1.model.LocalizationContext localizationContext) {
 
         com.cloudera.director.spi.v2.model.exception.PluginExceptionConditionAccumulator accumulatorV2 =

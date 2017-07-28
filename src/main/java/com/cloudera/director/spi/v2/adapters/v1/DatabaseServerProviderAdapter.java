@@ -14,8 +14,6 @@
 
 package com.cloudera.director.spi.v2.adapters.v1;
 
-import static com.cloudera.director.spi.v1.util.Preconditions.checkNotNull;
-
 import com.cloudera.director.spi.v2.database.DatabaseServerInstance;
 import com.cloudera.director.spi.v2.database.DatabaseServerInstanceTemplate;
 import com.cloudera.director.spi.v2.database.DatabaseServerProvider;
@@ -282,7 +280,7 @@ public class DatabaseServerProviderAdapter {
         LocalizationContext localizationContext,
         com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate delegate) {
       super(name, configuration, tags, localizationContext);
-      this.delegate = checkNotNull(delegate, "delegate is null");
+      this.delegate = Preconditions.checkNotNull(delegate, "delegate is null");
     }
 
     public com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate getDelegate() {
@@ -304,11 +302,11 @@ public class DatabaseServerProviderAdapter {
     Preconditions.checkNotNull(supportedDatabaseType, "supportedDatabaseType is null");
     switch (supportedDatabaseType) {
       case POSTGRESQL:
-        return com.cloudera.director.spi.v2.database.DatabaseType.POSTGRESQL;
+        return DatabaseType.POSTGRESQL;
       case MYSQL:
-        return com.cloudera.director.spi.v2.database.DatabaseType.MYSQL;
+        return DatabaseType.MYSQL;
       case ORACLE:
-        return com.cloudera.director.spi.v2.database.DatabaseType.ORACLE;
+        return DatabaseType.ORACLE;
       default:
         throw new IllegalArgumentException("Unknown supportedDatabaseType: " + supportedDatabaseType);
     }

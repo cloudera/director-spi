@@ -50,7 +50,7 @@ public class ComputeProviderAdapter {
       T extends ComputeInstanceTemplate,
       U extends com.cloudera.director.spi.v1.compute.ComputeInstance<V>,
       V extends com.cloudera.director.spi.v1.compute.ComputeInstanceTemplate>
-  ComputeProvider<R,T> fromV1(final com.cloudera.director.spi.v1.compute.ComputeProvider<U,V> computeProvider) {
+  ComputeProvider<R, T> fromV1(final com.cloudera.director.spi.v1.compute.ComputeProvider<U, V> computeProvider) {
     return new ComputeProvider<R, T>() {
       @Override
       public Map<String, InstanceState> getInstanceState(T template, Collection<String> instanceIds) {
@@ -197,6 +197,7 @@ public class ComputeProviderAdapter {
 
   // Functions to convert V2 -> V1
 
+  @SuppressWarnings("PMD.UnusedPrivateMethod")
   private static com.cloudera.director.spi.v1.compute.ComputeInstanceTemplate toV1(
       final ComputeInstanceTemplate computeInstanceTemplate) {
     ComputeProviderAdapter.ComputeInstanceTemplateWrapper wrapper

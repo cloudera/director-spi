@@ -19,5 +19,9 @@ limitations under the License.
     <Match>
         <Class name="com.cloudera.director.spi.v2.util.Base64" />
     </Match>
+  <Match>
+      <Class name="com.cloudera.director.spi.v2.adapters.v1.DatabaseServerProviderAdapter"/>
+      <Bug pattern="BC_UNCONFIRMED_CAST"/>
+  </Match>
 </FindBugsFilter>
 

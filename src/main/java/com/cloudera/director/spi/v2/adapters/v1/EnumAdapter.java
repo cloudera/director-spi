@@ -34,21 +34,21 @@ public class EnumAdapter {
   public static InstanceStatus fromV1(com.cloudera.director.spi.v1.model.InstanceStatus instanceStatus) {
     switch (instanceStatus) {
       case PENDING:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.PENDING;
+        return InstanceStatus.PENDING;
       case RUNNING:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.RUNNING;
+        return InstanceStatus.RUNNING;
       case STOPPING:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.STOPPING;
+        return InstanceStatus.STOPPING;
       case STOPPED:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.STOPPED;
+        return InstanceStatus.STOPPED;
       case DELETING:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.DELETING;
+        return InstanceStatus.DELETING;
       case DELETED:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.DELETED;
+        return InstanceStatus.DELETED;
       case FAILED:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.FAILED;
+        return InstanceStatus.FAILED;
       case UNKNOWN:
-        return com.cloudera.director.spi.v2.model.InstanceStatus.UNKNOWN;
+        return InstanceStatus.UNKNOWN;
       default:
         throw new IllegalArgumentException("Unknown instanceStatus: " + instanceStatus);
     }
@@ -59,17 +59,17 @@ public class EnumAdapter {
     Preconditions.checkNotNull(widget, "widget is null");
     switch (widget) {
       case RADIO:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.RADIO;
+        return DisplayProperty.Widget.RADIO;
       case CHECKBOX:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.CHECKBOX;
+        return DisplayProperty.Widget.CHECKBOX;
       case TEXT:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.TEXT;
+        return DisplayProperty.Widget.TEXT;
       case TEXTAREA:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.TEXTAREA;
+        return DisplayProperty.Widget.TEXTAREA;
       case FILE:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.FILE;
+        return DisplayProperty.Widget.FILE;
       case MULTI:
-        return com.cloudera.director.spi.v2.model.DisplayProperty.Widget.MULTI;
+        return DisplayProperty.Widget.MULTI;
       default:
         throw new IllegalArgumentException("Unknown widget: " + widget);
     }
@@ -80,13 +80,13 @@ public class EnumAdapter {
     Preconditions.checkNotNull(type, "type is null");
     switch (type) {
       case BOOLEAN:
-        return com.cloudera.director.spi.v2.model.Property.Type.BOOLEAN;
+        return Property.Type.BOOLEAN;
       case INTEGER:
-        return com.cloudera.director.spi.v2.model.Property.Type.INTEGER;
+        return Property.Type.INTEGER;
       case DOUBLE:
-        return com.cloudera.director.spi.v2.model.Property.Type.DOUBLE;
+        return Property.Type.DOUBLE;
       case STRING:
-        return com.cloudera.director.spi.v2.model.Property.Type.STRING;
+        return Property.Type.STRING;
       default:
         throw new IllegalArgumentException("Unknown type: " + type);
     }
@@ -97,27 +97,27 @@ public class EnumAdapter {
     Preconditions.checkNotNull(widget, "widget is null");
     switch (widget) {
       case RADIO:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.RADIO;
+        return ConfigurationProperty.Widget.RADIO;
       case CHECKBOX:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.CHECKBOX;
+        return ConfigurationProperty.Widget.CHECKBOX;
       case TEXT:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.TEXT;
+        return ConfigurationProperty.Widget.TEXT;
       case PASSWORD:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.PASSWORD;
+        return ConfigurationProperty.Widget.PASSWORD;
       case NUMBER:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.NUMBER;
+        return ConfigurationProperty.Widget.NUMBER;
       case TEXTAREA:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.TEXTAREA;
+        return ConfigurationProperty.Widget.TEXTAREA;
       case FILE:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.FILE;
+        return ConfigurationProperty.Widget.FILE;
       case LIST:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.LIST;
+        return ConfigurationProperty.Widget.LIST;
       case OPENLIST:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.OPENLIST;
+        return ConfigurationProperty.Widget.OPENLIST;
       case MULTI:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.MULTI;
+        return ConfigurationProperty.Widget.MULTI;
       case OPENMULTI:
-        return com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget.OPENMULTI;
+        return ConfigurationProperty.Widget.OPENMULTI;
       default:
         throw new IllegalArgumentException("Unknown widget: " + widget);
     }
@@ -128,11 +128,11 @@ public class EnumAdapter {
     if (virtualizationType == null) return null;
     switch (virtualizationType) {
       case PARAVIRTUALIZATION:
-        return com.cloudera.director.spi.v2.compute.VirtualizationType.PARAVIRTUALIZATION;
+        return VirtualizationType.PARAVIRTUALIZATION;
       case HARDWARE_ASSISTED:
-        return com.cloudera.director.spi.v2.compute.VirtualizationType.HARDWARE_ASSISTED;
+        return VirtualizationType.HARDWARE_ASSISTED;
       case UNKNOWN:
-        return com.cloudera.director.spi.v2.compute.VirtualizationType.UNKNOWN;
+        return VirtualizationType.UNKNOWN;
       default:
         throw new IllegalArgumentException("Unknown virtualizationType: " + virtualizationType);
     }

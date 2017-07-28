@@ -14,9 +14,9 @@
 
 package com.cloudera.director.spi.v2.model.util;
 
+import com.cloudera.director.spi.v2.model.ConfigurationValidator;
 import com.cloudera.director.spi.v2.model.Configured;
 import com.cloudera.director.spi.v2.model.LocalizationContext;
-import com.cloudera.director.spi.v2.model.ConfigurationValidator;
 import com.cloudera.director.spi.v2.model.exception.PluginExceptionConditionAccumulator;
 import com.cloudera.director.spi.v2.util.Preconditions;
 
