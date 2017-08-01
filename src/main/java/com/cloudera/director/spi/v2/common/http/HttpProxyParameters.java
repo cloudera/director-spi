@@ -15,6 +15,11 @@
 package com.cloudera.director.spi.v2.common.http;
 
 import static com.cloudera.director.spi.v2.util.Preconditions.checkArgument;
+import static com.cloudera.director.spi.v2.util.Preconditions.checkNotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Houses and validates HTTP proxy parameters.
@@ -28,12 +33,13 @@ public class HttpProxyParameters {
   private final String domain;
   private final String workstation;
   private final boolean preemptiveBasicProxyAuth;
+  private final List<String> proxyBypassHosts;
 
   /**
    * Constructs HTTP proxy parameters with default configuration.
    */
   public HttpProxyParameters() {
-    this(null, -1, null, null, null, null, false);
+    this(null, -1, null, null, null, null, false, Collections.<String>emptyList());
   }
 
   /**
@@ -54,11 +60,13 @@ public class HttpProxyParameters {
    * @param domain                   the proxy domain (NTLM authentication only)
    * @param workstation              the proxy workstation (NTLM authentication only)
    * @param preemptiveBasicProxyAuth whether the proxy should preemptively authenticate
+   * @param proxyBypassHosts         hosts or domain extensions that should be used to determine if the proxy
+   *                                 should be used for a domain
    */
   @SuppressWarnings("PMD.UselessParentheses")
   public HttpProxyParameters(String host, int port, String username,
       String password, String domain, String workstation,
-      boolean preemptiveBasicProxyAuth) {
+      boolean preemptiveBasicProxyAuth, List<String> proxyBypassHosts) {
     this.host = host;
     this.port = port;
 
@@ -82,6 +90,8 @@ public class HttpProxyParameters {
         "NTLM requires a username, password, domain, and workstation to be supplied.");
 
     this.preemptiveBasicProxyAuth = preemptiveBasicProxyAuth;
+
+    this.proxyBypassHosts = new ArrayList<String>(checkNotNull(proxyBypassHosts, "proxyBypassHosts is null"));
   }
 
   /**
@@ -145,5 +155,15 @@ public class HttpProxyParameters {
    */
   public boolean isPreemptiveBasicProxyAuth() {
     return preemptiveBasicProxyAuth;
+  }
+
+  /**
+   * Returns a list of domain hosts or domain extensions that should be used to determine if a request
+   * should be routed through the proxy.
+   *
+   * @return a list of domain hosts or domain extensions that should avoid the supplied proxy
+   */
+  public List<String> getProxyBypassHosts() {
+    return proxyBypassHosts;
   }
 }

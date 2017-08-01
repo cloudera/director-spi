@@ -16,46 +16,53 @@ package com.cloudera.director.spi.v2.common.http;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.google.common.collect.Lists;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 
 public class HttpProxyParametersTest {
 
+  private static final List<String> EMPTY_HOSTS = Collections.emptyList();
+
   @Test
   public void testValidProxyConstructor() {
-    constructAndVerify("host", 2, "user", "pass", "domain", "workstation", false);
-    constructAndVerify("host", 2, "user", "pass", null, null, false);
-    constructAndVerify("host", 2, null, null, null, null, false);
-    constructAndVerify(null, -1, null, null, null, null, false);
+    constructAndVerify("host", 2, "user", "pass", "domain", "workstation", false, EMPTY_HOSTS);
+    constructAndVerify("host", 2, "user", "pass", null, null, false, EMPTY_HOSTS);
+    constructAndVerify("host", 2, null, null, null, null, false, Lists.newArrayList("blah.com"));
+    constructAndVerify(null, -1, null, null, null, null, false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorBadPort() {
-    new HttpProxyParameters("host", -1, "user", "pass", "domain", "workstation", false);
+    new HttpProxyParameters("host", -1, "user", "pass", "domain", "workstation", false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorMissingUser() {
-    new HttpProxyParameters("host", 1234, null, "pass", "domain", "workstation", false);
+    new HttpProxyParameters("host", 1234, null, "pass", "domain", "workstation", false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorMissingPassword() {
-    new HttpProxyParameters("host", 1234, "user", null, "domain", "workstation", false);
+    new HttpProxyParameters("host", 1234, "user", null, "domain", "workstation", false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorMissingDomain() {
-    new HttpProxyParameters("host", 1234, "user", "pass", null, "workstation", false);
+    new HttpProxyParameters("host", 1234, "user", "pass", null, "workstation", false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorMissingWorkstation() {
-    new HttpProxyParameters("host", 1234, "user", "pass", "domain", null, false);
+    new HttpProxyParameters("host", 1234, "user", "pass", "domain", null, false, EMPTY_HOSTS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testProxyConstructorSuppliedUserMissingHost() {
-    new HttpProxyParameters(null, 1234, "user", "pass", "domain", "workstation", false);
+    new HttpProxyParameters(null, 1234, "user", "pass", "domain", "workstation", false, EMPTY_HOSTS);
   }
 
   /**
@@ -71,9 +78,9 @@ public class HttpProxyParametersTest {
    * @param preemptiveBasicProxyAuth whether to use preemptive basic authentication
    */
   private void constructAndVerify(String host, int port, String username, String password,
-      String domain, String workstation, boolean preemptiveBasicProxyAuth) {
+      String domain, String workstation, boolean preemptiveBasicProxyAuth, List<String> proxyBypassHosts) {
     HttpProxyParameters httpProxyParameters = new HttpProxyParameters(host, port, username,
-        password, domain, workstation, preemptiveBasicProxyAuth);
+        password, domain, workstation, preemptiveBasicProxyAuth, proxyBypassHosts);
     assertThat(httpProxyParameters.getHost()).isEqualTo(host);
     assertThat(httpProxyParameters.getPort()).isEqualTo(port);
     assertThat(httpProxyParameters.getUsername()).isEqualTo(username);
@@ -81,5 +88,6 @@ public class HttpProxyParametersTest {
     assertThat(httpProxyParameters.getDomain()).isEqualTo(domain);
     assertThat(httpProxyParameters.getWorkstation()).isEqualTo(workstation);
     assertThat(httpProxyParameters.isPreemptiveBasicProxyAuth()).isEqualTo(preemptiveBasicProxyAuth);
+    assertThat(httpProxyParameters.getProxyBypassHosts()).isEqualTo(proxyBypassHosts);
   }
 }
