@@ -124,6 +124,12 @@ public class ComputeProviderAdapter {
       public void delete(T template, Collection<String> resourceIds) throws InterruptedException {
         computeProvider.delete((V) toV1(template), resourceIds);
       }
+
+      @Override
+      public Map<String, List<String>> getHostKeyFingerprints(T template, Collection<String> instanceIds)
+          throws InterruptedException {
+        return new HashMap<String, List<String>>();
+      }
     };
   }
 

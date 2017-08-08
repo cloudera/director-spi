@@ -17,6 +17,7 @@ package com.cloudera.director.spi.v2.adapters.v1;
 import com.cloudera.director.spi.v2.adapters.v1.fixtures.TestFixturesV1;
 import com.cloudera.director.spi.v2.adapters.v1.fixtures.TestFixturesV2;
 import com.cloudera.director.spi.v2.compute.ComputeInstance;
+import com.cloudera.director.spi.v2.compute.ComputeInstanceTemplate;
 import com.cloudera.director.spi.v2.compute.ComputeProvider;
 import com.cloudera.director.spi.v2.database.DatabaseServerInstance;
 import com.cloudera.director.spi.v2.database.DatabaseServerProvider;
@@ -166,6 +167,7 @@ public class FromV1Test {
     testInstanceProvider(v2, convertedV2, configs, ComputeInstance.class);
   }
 
+  @SuppressWarnings("unchecked")
   private void testInstanceProvider(InstanceProvider instanceProviderV2,
                                     InstanceProvider instanceProviderConvertedV2,
                                     Map<String, String> configs, Class<?> expectedInstanceClass)
@@ -197,6 +199,21 @@ public class FromV1Test {
     Map<String, InstanceState> instanceStatesV2 = instanceProviderV2.getInstanceState(templateV2, resourceIds);
     Map<String, InstanceState> convertedInstanceStatesV2 = instanceProviderV2.getInstanceState(templateV2, resourceIds);
     checkInstanceState(instanceStatesV2, convertedInstanceStatesV2);
+
+    // test host key fingerprint retrieval for compute provider
+
+    if (expectedInstanceClass.isAssignableFrom(ComputeProvider.class)) {
+      ComputeProvider computeProviderV2 = (ComputeProvider) instanceProviderV2;
+      ComputeProvider computeProviderConvertedV2 = (ComputeProvider) instanceProviderConvertedV2;
+
+      Map<String, List<String>> hostKeyFingerprintsV2 = computeProviderV2
+          .getHostKeyFingerprints((ComputeInstanceTemplate) templateV2, resourceIds);
+      Map<String, List<String>> hostKeyFingerprintsConvertedV2 = computeProviderConvertedV2
+          .getHostKeyFingerprints((ComputeInstanceTemplate) convertedTemplateV2, resourceIds);
+
+      assertThat(hostKeyFingerprintsV2).hasSameSizeAs(resourceIds);
+      assertThat(hostKeyFingerprintsConvertedV2).isEmpty();
+    }
 
     // test delete
 

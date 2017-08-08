@@ -120,5 +120,15 @@ public class TestComputeProviderV2 {
         computeInstances.remove(id);
       }
     }
+
+    @Override
+    public Map<String, List<String>> getHostKeyFingerprints(TestComputeInstanceTemplate template,
+                                                            Collection<String> instanceIds) throws InterruptedException {
+      Map<String, List<String>> fingerprints = Maps.newHashMap();
+      for (String id : instanceIds) {
+        fingerprints.put(id, Lists.newArrayList("fingerprint-" + id));
+      }
+      return fingerprints;
+    }
   }
 }
