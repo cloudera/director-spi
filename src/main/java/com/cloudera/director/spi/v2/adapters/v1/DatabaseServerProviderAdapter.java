@@ -111,8 +111,9 @@ public class DatabaseServerProviderAdapter {
       }
 
       @Override
-      public void allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException {
+      public Collection<R> allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException {
         databaseServerProvider.allocate((V) toV1(template), resourceIds, minCount);
+        return find(template, resourceIds);
       }
 
       @Override

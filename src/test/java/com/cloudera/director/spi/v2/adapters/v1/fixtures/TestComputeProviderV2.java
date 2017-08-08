@@ -14,24 +14,24 @@
 
 package com.cloudera.director.spi.v2.adapters.v1.fixtures;
 
-import com.cloudera.director.spi.v2.compute.util.AbstractComputeProvider;
+import static org.mockito.Mockito.mock;
+
 import com.cloudera.director.spi.v2.compute.ComputeInstance;
 import com.cloudera.director.spi.v2.compute.ComputeInstanceTemplate;
 import com.cloudera.director.spi.v2.compute.util.AbstractComputeInstance;
+import com.cloudera.director.spi.v2.compute.util.AbstractComputeProvider;
 import com.cloudera.director.spi.v2.model.Configured;
 import com.cloudera.director.spi.v2.model.InstanceState;
 import com.cloudera.director.spi.v2.model.LocalizationContext;
 import com.cloudera.director.spi.v2.model.Resource;
 import com.cloudera.director.spi.v2.provider.ResourceProviderMetadata;
-import org.assertj.core.util.Lists;
-import org.assertj.core.util.Maps;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.net.InetAddress;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * Contains test compute provider classes that implement V2 of the SPI.
@@ -56,7 +56,7 @@ public class TestComputeProviderV2 {
 
     @Override
     public Map<String, String> getProperties() {
-      Map<String, String> result = new HashMap<String, String>();
+      Map<String, String> result = Maps.newHashMap();
       result.put("prop1", "val1");
       return result;    }
   }
@@ -90,12 +90,15 @@ public class TestComputeProviderV2 {
     }
 
     @Override
-    public void allocate(TestComputeInstanceTemplate template, Collection<String> resourceIds, int minCount) throws InterruptedException {
+    public Collection<TestComputeInstance> allocate(TestComputeInstanceTemplate template, Collection<String> resourceIds, int minCount) throws InterruptedException {
+      List<TestComputeInstance> allocatedInstances = Lists.newArrayList();
       for (String id : resourceIds) {
         TestComputeInstance testComputeInstance =
             new TestComputeInstance(template, id, mock(InetAddress.class));
         computeInstances.put(id, testComputeInstance);
+        allocatedInstances.add(testComputeInstance);
       }
+      return allocatedInstances;
     }
 
     @Override

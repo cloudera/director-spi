@@ -90,9 +90,11 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
    * @param resourceIds the unique identifiers for the resources
    * @param minCount    the minimum number of resources to allocate if not all resources can be
    *                    allocated
+   * @return the successfully allocated resources. This is guaranteed to be equal to or greater
+   * than <code>minCount</code> in size
    * @throws InterruptedException if the operation is interrupted
    */
-  void allocate(T template, Collection<String> resourceIds, int minCount)
+  Collection<R> allocate(T template, Collection<String> resourceIds, int minCount)
       throws InterruptedException;
 
   /**

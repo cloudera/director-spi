@@ -102,8 +102,10 @@ public class ComputeProviderAdapter {
       }
 
       @Override
-      public void allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException {
-        computeProvider.allocate((V) toV1(template), resourceIds, minCount);
+      public Collection<R> allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException {
+        V v1Template = (V) toV1(template);
+        computeProvider.allocate(v1Template, resourceIds, minCount);
+        return find(template, resourceIds);
       }
 
       @Override

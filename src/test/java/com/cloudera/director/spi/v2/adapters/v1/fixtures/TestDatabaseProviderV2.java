@@ -14,6 +14,8 @@
 
 package com.cloudera.director.spi.v2.adapters.v1.fixtures;
 
+import static org.mockito.Mockito.mock;
+
 import com.cloudera.director.spi.v2.database.DatabaseServerInstance;
 import com.cloudera.director.spi.v2.database.DatabaseServerInstanceTemplate;
 import com.cloudera.director.spi.v2.database.util.AbstractDatabaseServerInstance;
@@ -23,15 +25,14 @@ import com.cloudera.director.spi.v2.model.InstanceState;
 import com.cloudera.director.spi.v2.model.LocalizationContext;
 import com.cloudera.director.spi.v2.model.Resource;
 import com.cloudera.director.spi.v2.provider.ResourceProviderMetadata;
-import org.assertj.core.util.Lists;
-import org.assertj.core.util.Maps;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * Contains test database provider classes that implement V2 of the SPI.
@@ -91,13 +92,16 @@ public class TestDatabaseProviderV2 {
     }
 
     @Override
-    public void allocate(TestDatabaseServerInstanceTemplate template, Collection<String> resourceIds,
+    public Collection<TestDatabaseServerInstance> allocate(TestDatabaseServerInstanceTemplate template, Collection<String> resourceIds,
                          int minCount) throws InterruptedException {
+      List<TestDatabaseServerInstance> allocatedInstances = Lists.newArrayList();
       for (String id : resourceIds) {
         TestDatabaseServerInstance testDatabaseServerInstance =
             new TestDatabaseServerInstance(template, id, mock(InetAddress.class), 1000);
         dbInstances.put(id, testDatabaseServerInstance);
+        allocatedInstances.add(testDatabaseServerInstance);
       }
+      return allocatedInstances;
     }
 
     @Override
