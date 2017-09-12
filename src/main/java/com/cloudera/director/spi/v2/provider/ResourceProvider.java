@@ -82,16 +82,19 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
 
   /**
    * Atomically allocates multiple resources with the specified identifiers based on a single
-   * resource template. If not all the resources can be allocated, the number of resources
-   * allocated must at least the specified minimum or the method must fail cleanly with no
-   * billing implications.
+   * resource template. More specifically, <p/>
+   * if at least minCount resources can be allocated, the allocated amount of resources
+   * will be returned.<p/>
+   * if minCount resources cannot be allocated, no resource will be allocated with any billing
+   * implications, returning an empty collection.
    *
    * @param template    the resource template
    * @param resourceIds the unique identifiers for the resources
    * @param minCount    the minimum number of resources to allocate if not all resources can be
    *                    allocated
-   * @return the successfully allocated resources. This is guaranteed to be equal to or greater
-   * than <code>minCount</code> in size
+   * @return the successfully allocated resources. If minCount can be satisfied, it will return a
+   * collection with resources equal to or greater than <code>minCount</code> in size. Otherwise
+   * it will return an empty collection
    * @throws InterruptedException if the operation is interrupted
    */
   Collection<R> allocate(T template, Collection<String> resourceIds, int minCount)
