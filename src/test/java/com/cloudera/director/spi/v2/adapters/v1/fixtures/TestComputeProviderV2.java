@@ -28,11 +28,13 @@ import com.cloudera.director.spi.v2.model.exception.UnrecoverableProviderExcepti
 import com.cloudera.director.spi.v2.provider.ResourceProviderMetadata;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Contains test compute provider classes that implement V2 of the SPI.
@@ -127,11 +129,11 @@ public class TestComputeProviderV2 {
     }
 
     @Override
-    public Map<String, List<String>> getHostKeyFingerprints(TestComputeInstanceTemplate template,
-                                                            Collection<String> instanceIds) throws InterruptedException {
-      Map<String, List<String>> fingerprints = Maps.newHashMap();
+    public Map<String, Set<String>> getHostKeyFingerprints(TestComputeInstanceTemplate template,
+                                                           Collection<String> instanceIds) throws InterruptedException {
+      Map<String, Set<String>> fingerprints = Maps.newHashMap();
       for (String id : instanceIds) {
-        fingerprints.put(id, Lists.newArrayList("fingerprint-" + id));
+        fingerprints.put(id, Sets.newHashSet("fingerprint-" + id));
       }
       return fingerprints;
     }

@@ -17,8 +17,8 @@ package com.cloudera.director.spi.v2.compute;
 import com.cloudera.director.spi.v2.provider.InstanceProvider;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a provider of compute instances.
@@ -30,7 +30,7 @@ public interface ComputeProvider<R extends ComputeInstance<T>, T extends Compute
     extends InstanceProvider<R, T> {
 
   /**
-   * Returns a map from instance identifiers to a list of host key fingerprints for the specified
+   * Returns a map from instance identifiers to a set of host key fingerprints for the specified
    * instances. The implementation can return an empty map to indicate that it cannot find the host
    * key fingerprints or that it does not support retrieving host key fingerprints. In that case
    * Director may use other means of host key fingerprint retrieval or may skip host key
@@ -42,6 +42,6 @@ public interface ComputeProvider<R extends ComputeInstance<T>, T extends Compute
    * @return the map from instance identifiers to host key fingerprints for each instance
    * @throws InterruptedException if the operation is interrupted
    */
-  Map<String, List<String>> getHostKeyFingerprints(T template, Collection<String> instanceIds)
+  Map<String, Set<String>> getHostKeyFingerprints(T template, Collection<String> instanceIds)
       throws InterruptedException;
 }

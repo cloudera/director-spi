@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Contains functions to convert the compute provider and related
@@ -151,9 +152,9 @@ public class ComputeProviderAdapter {
       }
 
       @Override
-      public Map<String, List<String>> getHostKeyFingerprints(T template, Collection<String> instanceIds)
+      public Map<String, Set<String>> getHostKeyFingerprints(T template, Collection<String> instanceIds)
           throws InterruptedException {
-        return new HashMap<String, List<String>>();
+        return new HashMap<String, Set<String>>();
       }
     };
   }
