@@ -22,6 +22,7 @@ import com.cloudera.director.spi.v1.model.Configured;
 import com.cloudera.director.spi.v1.model.InstanceState;
 import com.cloudera.director.spi.v1.model.LocalizationContext;
 import com.cloudera.director.spi.v1.model.Resource;
+import com.cloudera.director.spi.v1.model.exception.UnrecoverableProviderException;
 import com.cloudera.director.spi.v1.provider.ResourceProviderMetadata;
 import org.assertj.core.util.Lists;
 import org.assertj.core.util.Maps;
@@ -93,6 +94,10 @@ public class TestDatabaseProviderV1 {
     @Override
     public void allocate(TestDatabaseServerInstanceTemplate template, Collection<String> resourceIds,
                          int minCount) throws InterruptedException {
+      if (minCount < 0) {
+        throw new UnrecoverableProviderException("min count should be greater than 0");
+      }
+
       for (String id : resourceIds) {
         TestDatabaseServerInstance testDatabaseServerInstance =
             new TestDatabaseServerInstance(template, id, mock(InetAddress.class), 1000);

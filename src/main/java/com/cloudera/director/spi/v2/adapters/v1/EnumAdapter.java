@@ -19,6 +19,7 @@ import com.cloudera.director.spi.v2.model.ConfigurationProperty;
 import com.cloudera.director.spi.v2.model.DisplayProperty;
 import com.cloudera.director.spi.v2.model.InstanceStatus;
 import com.cloudera.director.spi.v2.model.Property;
+import com.cloudera.director.spi.v2.model.exception.PluginExceptionCondition;
 import com.cloudera.director.spi.v2.util.Preconditions;
 
 /**
@@ -135,6 +136,19 @@ public class EnumAdapter {
         return VirtualizationType.UNKNOWN;
       default:
         throw new IllegalArgumentException("Unknown virtualizationType: " + virtualizationType);
+    }
+  }
+
+  public static PluginExceptionCondition.Type fromV1(
+      com.cloudera.director.spi.v1.model.exception.PluginExceptionCondition.Type pluginExceptionConditionType) {
+    Preconditions.checkNotNull(pluginExceptionConditionType, "pluginExceptionConditionType is null");
+    switch (pluginExceptionConditionType) {
+      case ERROR:
+        return PluginExceptionCondition.Type.ERROR;
+      case WARNING:
+        return PluginExceptionCondition.Type.WARNING;
+      default:
+        throw new IllegalArgumentException("Unknown pluginExceptionConditionType: " + pluginExceptionConditionType);
     }
   }
 

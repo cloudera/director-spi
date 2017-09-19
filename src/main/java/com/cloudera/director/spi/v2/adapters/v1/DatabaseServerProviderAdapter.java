@@ -60,15 +60,19 @@ public class DatabaseServerProviderAdapter {
     return new DatabaseServerProvider<R, T>() {
       @Override
       public Map<String, InstanceState> getInstanceState(T template, Collection<String> instanceIds) {
-        // todo return abstractmap instead of hashmap
-        Map<String, com.cloudera.director.spi.v1.model.InstanceState> instanceStates
-            = databaseServerProvider.getInstanceState((V) toV1(template), instanceIds);
+        try {
+          // todo return abstractmap instead of hashmap
+          Map<String, com.cloudera.director.spi.v1.model.InstanceState> instanceStates
+              = databaseServerProvider.getInstanceState((V) toV1(template), instanceIds);
 
-        Map<String, InstanceState> ret = new HashMap<String, InstanceState>();
-        for (Map.Entry<String, com.cloudera.director.spi.v1.model.InstanceState> entry : instanceStates.entrySet()) {
-          ret.put(entry.getKey(), FromV1.fromV1(entry.getValue()));
+          Map<String, InstanceState> ret = new HashMap<String, InstanceState>();
+          for (Map.Entry<String, com.cloudera.director.spi.v1.model.InstanceState> entry : instanceStates.entrySet()) {
+            ret.put(entry.getKey(), FromV1.fromV1(entry.getValue()));
+          }
+          return ret;
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
         }
-        return ret;
       }
 
       @Override
@@ -95,42 +99,62 @@ public class DatabaseServerProviderAdapter {
       @Override
       public void validateResourceTemplateConfiguration(String name, Configured configuration,
                                                         PluginExceptionConditionAccumulator accumulator) {
-        com.cloudera.director.spi.v1.model.exception.PluginExceptionConditionAccumulator accumulatorV1
-            = ToV1.toV1(accumulator);
-        databaseServerProvider.validateResourceTemplateConfiguration(name, ToV1.toV1(configuration),
-            ToV1.toV1(accumulator));
-        FromV1.addNewConditions(accumulator, FromV1.fromV1(accumulatorV1));
+        try {
+          com.cloudera.director.spi.v1.model.exception.PluginExceptionConditionAccumulator accumulatorV1
+              = ToV1.toV1(accumulator);
+          databaseServerProvider.validateResourceTemplateConfiguration(name, ToV1.toV1(configuration),
+              accumulatorV1);
+          FromV1.addNewConditions(accumulator, FromV1.fromV1(accumulatorV1));
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
+        }
       }
 
       @Override
       public T createResourceTemplate(String name, Configured configuration, Map<String, String> tags) {
-        com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate databaseServerInstanceTemplate;
-        databaseServerInstanceTemplate =
-            databaseServerProvider.createResourceTemplate(name, ToV1.toV1(configuration), tags);
-        return (T) fromV1(databaseServerInstanceTemplate);
+        try {
+          com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate databaseServerInstanceTemplate;
+          databaseServerInstanceTemplate =
+              databaseServerProvider.createResourceTemplate(name, ToV1.toV1(configuration), tags);
+          return (T) fromV1(databaseServerInstanceTemplate);
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
+        }
       }
 
       @Override
       public Collection<R> allocate(T template, Collection<String> resourceIds, int minCount) throws InterruptedException {
-        databaseServerProvider.allocate((V) toV1(template), resourceIds, minCount);
-        return find(template, resourceIds);
+        try {
+          databaseServerProvider.allocate((V) toV1(template), resourceIds, minCount);
+          return find(template, resourceIds);
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
+        }
       }
 
       @Override
       public Collection<R> find(T template, Collection<String> resourceIds) throws InterruptedException {
-        // todo return Collection
-        Collection<U> databaseServerInstances = databaseServerProvider.find((V) toV1(template), resourceIds);
-        List<U> databaseServerInstancesList = new ArrayList<U>(databaseServerInstances);
-        List<R> ret = new ArrayList<R>();
-        for (U databaseServerInstance : databaseServerInstancesList) {
-          ret.add((R) fromV1(databaseServerInstance));
+        try {
+          // todo return Collection
+          Collection<U> databaseServerInstances = databaseServerProvider.find((V) toV1(template), resourceIds);
+          List<U> databaseServerInstancesList = new ArrayList<U>(databaseServerInstances);
+          List<R> ret = new ArrayList<R>();
+          for (U databaseServerInstance : databaseServerInstancesList) {
+            ret.add((R) fromV1(databaseServerInstance));
+          }
+          return ret;
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
         }
-        return ret;
       }
 
       @Override
       public void delete(T template, Collection<String> resourceIds) throws InterruptedException {
-        databaseServerProvider.delete((V) toV1(template), resourceIds);
+        try {
+          databaseServerProvider.delete((V) toV1(template), resourceIds);
+        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+          throw ExceptionsAdapter.fromV1(ex);
+        }
       }
     };
   }

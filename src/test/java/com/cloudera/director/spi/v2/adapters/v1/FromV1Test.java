@@ -25,6 +25,8 @@ import com.cloudera.director.spi.v2.model.ConfigurationProperty;
 import com.cloudera.director.spi.v2.model.DisplayProperty;
 import com.cloudera.director.spi.v2.model.Instance;
 import com.cloudera.director.spi.v2.model.InstanceTemplate;
+import com.cloudera.director.spi.v2.model.exception.AbstractPluginException;
+import com.cloudera.director.spi.v2.model.exception.UnrecoverableProviderException;
 import com.cloudera.director.spi.v2.model.util.SimpleConfiguration;
 import com.cloudera.director.spi.v2.provider.CloudProvider;
 import com.cloudera.director.spi.v2.provider.CloudProviderMetadata;
@@ -224,6 +226,15 @@ public class FromV1Test {
     convertedResultsV2 = instanceProviderV2.find(templateV2, resourceIds);
     assertThat(resultsV2).hasSize(0);
     assertThat(convertedResultsV2).hasSize(0);
+
+    // test that exceptions get converted
+
+    try {
+      instanceProviderConvertedV2.allocate(convertedTemplateV2, resourceIds, -1);
+    } catch(RuntimeException ex) {
+      assertThat(AbstractPluginException.class.isAssignableFrom(ex.getClass()));
+      assertThat(UnrecoverableProviderException.class).isEqualTo(ex.getClass());
+    }
   }
 
   private void checkResourceProviderMetadata(ResourceProviderMetadata rpm1, ResourceProviderMetadata rpm2) {

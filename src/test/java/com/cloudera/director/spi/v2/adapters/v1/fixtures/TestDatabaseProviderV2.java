@@ -24,6 +24,7 @@ import com.cloudera.director.spi.v2.model.Configured;
 import com.cloudera.director.spi.v2.model.InstanceState;
 import com.cloudera.director.spi.v2.model.LocalizationContext;
 import com.cloudera.director.spi.v2.model.Resource;
+import com.cloudera.director.spi.v2.model.exception.UnrecoverableProviderException;
 import com.cloudera.director.spi.v2.provider.ResourceProviderMetadata;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -94,6 +95,10 @@ public class TestDatabaseProviderV2 {
     @Override
     public Collection<TestDatabaseServerInstance> allocate(TestDatabaseServerInstanceTemplate template, Collection<String> resourceIds,
                          int minCount) throws InterruptedException {
+      if (minCount < 0) {
+        throw new UnrecoverableProviderException("min count should be greater than 0");
+      }
+
       List<TestDatabaseServerInstance> allocatedInstances = Lists.newArrayList();
       for (String id : resourceIds) {
         TestDatabaseServerInstance testDatabaseServerInstance =
