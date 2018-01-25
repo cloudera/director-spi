@@ -17,6 +17,10 @@ package com.cloudera.director.spi.v2.model.exception;
 import static com.cloudera.director.spi.v2.util.Preconditions.checkNotNull;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents an error or warning that contributed to an exception.
@@ -48,23 +52,47 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
    */
   private final Type type;
 
-  /**
-   * The message.
-   */
-  private final String message;
 
   /**
-   * Creates a plugin exception condition with the specified parameters.
+   * Key value pairs to provide detailed exception information.
+   */
+  private final Map<String, String> exceptionInfo;
+
+
+  /**
+   * Return a map with a single message property.
+   *
+   * @param message the value for the message property
+   * @return a map with a single message property
+   */
+  public static Map<String, String> toExceptionInfoMap(String message) {
+    checkNotNull(message, "message is null");
+    if (message.isEmpty()) {
+      throw new IllegalArgumentException("message is empty");
+    }
+    return Collections.singletonMap("message", message);
+  }
+
+  /**
+   * Creates a plugin exception condition with only a message.
    *
    * @param type    the type of condition
    * @param message the message
    */
   public PluginExceptionCondition(Type type, String message) {
+    this(type, toExceptionInfoMap(message));
+  }
+
+  /**
+   * Creates a plugin exception condition with detailed exception information.
+   *
+   * @param type          the type of condition
+   * @param exceptionInfo detailed exception information
+   */
+  public PluginExceptionCondition(Type type, Map<String, String> exceptionInfo) {
     this.type = checkNotNull(type, "type is null");
-    this.message = checkNotNull(message, "message is null");
-    if (message.isEmpty()) {
-      throw new IllegalArgumentException("message is empty");
-    }
+    checkNotNull(exceptionInfo, "exceptionInfo is null");
+    this.exceptionInfo = exceptionInfo;
   }
 
   /**
@@ -77,12 +105,29 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
   }
 
   /**
-   * Returns the message.
+   * Returns the message if present.
    *
    * @return the message
+   * @throws IllegalStateException if no message is present
    */
   public String getMessage() {
-    return message;
+    if (exceptionInfo.containsKey("message")) {
+      String message = exceptionInfo.get("message");
+      if (message.isEmpty()) {
+        throw new IllegalArgumentException("message is empty");
+      }
+      return message;
+    }
+    throw new IllegalStateException("No message property in exception information map");
+  }
+
+  /**
+   * Get detailed exception information.
+   *
+   * @return detailed exception information.
+   */
+  public Map<String, String> getExceptionInfo() {
+    return new HashMap<>(exceptionInfo);
   }
 
   /**
@@ -113,15 +158,13 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
     PluginExceptionCondition that = (PluginExceptionCondition) o;
 
     if (type != that.type) return false;
-    if (!message.equals(that.message)) return false;
-
-    return true;
+    return exceptionInfo.equals(that.exceptionInfo);
   }
 
   @Override
   public int hashCode() {
     int result = type.hashCode();
-    result = 31 * result + message.hashCode();
+    result = 31 * result + exceptionInfo.hashCode();
     return result;
   }
 
@@ -129,17 +172,24 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
   public String toString() {
     return "PluginExceptionCondition{" +
         "type=" + type +
-        ", message='" + message + '\'' +
+        ", exceptionInfo=" + exceptionInfo +
         '}';
   }
 
-  @SuppressWarnings({"NullableProblems", "PMD.UselessParentheses"})
+  @SuppressWarnings({ "NullableProblems", "PMD.UselessParentheses" })
   @Override
   public int compareTo(PluginExceptionCondition o) {
     int result = type.compareTo(o.type);
     if (result == 0) {
-      result = message.compareTo(o.message);
+      result = compare(exceptionInfo, o.exceptionInfo);
     }
     return result;
   }
+
+  private int compare(Map<String, String> map1, Map<String, String> map2) {
+    TreeMap<String, String> tMap1 = new TreeMap<>(map1);
+    TreeMap<String, String> tMap2 = new TreeMap<>(map2);
+    return tMap1.toString().compareTo(tMap2.toString());
+  }
+
 }

@@ -70,13 +70,33 @@ public class PluginExceptionConditionAccumulator {
   }
 
   /**
-   * Adds an error condition to the accumulator.
+   * Adds an error condition with only a message to the accumulator.
    *
    * @param key     the key
    * @param message the message
    */
   public void addError(String key, String message) {
     addCondition(key, ERROR, message);
+  }
+
+  /**
+   * Adds an error condition with detailed exception information to the accumulator.
+   *
+   * @param key           the key
+   * @param exceptionInfo detailed exception information
+   */
+  public void addError(String key, Map<String, String> exceptionInfo) {
+    addCondition(key, ERROR, exceptionInfo);
+  }
+
+  /**
+   * Adds a general error condition (using key of null) with detailed exception
+   * information to the accumulator.
+   *
+   * @param exceptionInfo detailed exception information
+   */
+  public void addError(Map<String, String> exceptionInfo) {
+    addCondition(null, ERROR, exceptionInfo);
   }
 
   /**
@@ -89,7 +109,7 @@ public class PluginExceptionConditionAccumulator {
   }
 
   /**
-   * Adds a warning condition to the accumulator.
+   * Adds a warning condition with only a message to the accumulator.
    *
    * @param key     the key
    * @param message the message
@@ -99,18 +119,37 @@ public class PluginExceptionConditionAccumulator {
   }
 
   /**
-   * @param key     the key
-   * @param type    the type of condition
-   * @param message the message
+   * Adds a warning condition with detailed exception information to the accumulator.
+   *
+   * @param key           the key
+   * @param exceptionInfo detailed exception information
    */
+  public void addWarning(String key, Map<String, String> exceptionInfo) {
+    addCondition(key, WARNING, exceptionInfo);
+  }
+
+  /**
+   * Adds a general warning condition (using key of null) with detailed exception
+   * information to the accumulator.
+   *
+   * @param exceptionInfo detailed exception information
+   */
+  public void addWarning(Map<String, String> exceptionInfo) {
+    addCondition(null, WARNING, exceptionInfo);
+  }
+
   private synchronized void addCondition(String key, Type type, String message) {
+    addCondition(key, type, PluginExceptionCondition.toExceptionInfoMap(message));
+  }
+
+  private synchronized void addCondition(String key, Type type, Map<String, String> exceptionInfo) {
     Collection<PluginExceptionCondition> keyConditions = conditionsByKey.get(key);
     if (keyConditions == null) {
       keyConditions = new ArrayList<PluginExceptionCondition>();
       conditionsByKey.put(key, keyConditions);
     }
     PluginExceptionCondition condition =
-        new PluginExceptionCondition(type, message);
+        new PluginExceptionCondition(type, exceptionInfo);
     keyConditions.add(condition);
     conditionTypes.add(type);
   }
