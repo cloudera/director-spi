@@ -10,18 +10,38 @@
     <version>1.0.1</version>
     <name>Cloudera Director :: SPI :: V2</name>
 
-    <distributionManagement>
-        <repository>
-            <id>cdh.releases.repo</id>
-            <url>http://maven.jenkins.cloudera.com:8081/artifactory/libs-release-local</url>
-            <name>CDH Releases Repository</name>
-        </repository>
-        <snapshotRepository>
-            <id>cdh.snapshots.repo</id>
-            <url>http://maven.jenkins.cloudera.com:8081/artifactory/libs-snapshot-local</url>
-            <name>CDH Snapshots Repository</name>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>internal</id>
+            <distributionManagement>
+                <repository>
+                    <id>cdh.releases.repo</id>
+                    <url>http://maven.jenkins.cloudera.com:8081/artifactory/libs-release-local</url>
+                    <name>CDH Releases Repository</name>
+                </repository>
+                <snapshotRepository>
+                    <id>cdh.snapshots.repo</id>
+                    <url>http://maven.jenkins.cloudera.com:8081/artifactory/libs-snapshot-local</url>
+                    <name>CDH Snapshots Repository</name>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>external</id>
+            <distributionManagement>
+                <repository>
+                    <id>cdh.releases.repo</id>
+                    <url>http://repository.cloudera.com/artifactory/libs-release-local</url>
+                    <name>CDH Releases Repository</name>
+                </repository>
+                <snapshotRepository>
+                    <id>cdh.snapshots.repo</id>
+                    <url>http://repository.cloudera.com/artifactory/libs-snapshot-local</url>
+                    <name>CDH Snapshots Repository</name>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
