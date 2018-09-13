@@ -30,6 +30,10 @@ public interface InstanceProvider<I extends Instance<T>, T extends InstanceTempl
   /**
    * Returns a map from instance identifiers to instance state for the specified instances.
    *
+   * Preconditions:
+   * 1. if template.isAutomatic is true, then instanceIds are a collection of provider-specific instance Ids
+   * 2. if template.isAutomatic is false, currently the instances are a collection of virtual instance Ids
+   *
    * @param template    the resource template used for create the instances
    * @param instanceIds the unique identifiers for the instances
    * @return the map from instance identifiers to instance state for the specified batch of instances

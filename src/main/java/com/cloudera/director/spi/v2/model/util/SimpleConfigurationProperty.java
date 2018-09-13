@@ -43,11 +43,13 @@ public class SimpleConfigurationProperty extends AbstractConfigurationProperty {
    * @param sensitive           whether the configuration property contains sensitive information
    * @param hidden              whether the configuration property should be hidden from the user
    *                            interface
+   * @param defaultPlaceholder  the default human-readable defaultPlaceholder of the configuration
+   *                            property, used when a localized placeholder message cannot be found
    */
   protected SimpleConfigurationProperty(String configKey, Type type, String name, boolean required,
       Widget widget, String defaultValue, String defaultDescription, String defaultErrorMessage,
-      List<String> validValues, boolean sensitive, boolean hidden) {
+      List<String> validValues, boolean sensitive, boolean hidden, String defaultPlaceholder) {
     super(configKey, type, name, required, widget, defaultValue, defaultDescription,
-        defaultErrorMessage, validValues, sensitive, hidden);
+        defaultErrorMessage, validValues, sensitive, hidden, defaultPlaceholder);
   }
 }

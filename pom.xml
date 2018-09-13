@@ -7,8 +7,8 @@
 
     <groupId>com.cloudera.director</groupId>
     <artifactId>director-spi-v2</artifactId>
-    <version>1.0.1</version>
-    <name>Cloudera Director :: SPI :: V2</name>
+    <version>2.0.0</version>
+    <name>Cloudera Altus Director :: SPI :: V2</name>
 
     <profiles>
         <profile>
@@ -55,7 +55,7 @@
         <maven-checkstyle-plugin.version>2.13</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-        <findbugs-maven-plugin.version>3.0.3</findbugs-maven-plugin.version>
+        <spotbugs-maven-plugin.version>3.1.3.1</spotbugs-maven-plugin.version>
         <maven-pmd-plugin.version>3.2</maven-pmd-plugin.version>
     </properties>
 
@@ -105,8 +105,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -146,9 +146,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${findbugs-maven-plugin.version}</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
                 <configuration>
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
                     <failOnError>false</failOnError>

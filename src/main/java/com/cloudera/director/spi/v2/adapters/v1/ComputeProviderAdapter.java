@@ -65,7 +65,7 @@ public class ComputeProviderAdapter {
             ret.put(entry.getKey(), FromV1.fromV1(entry.getValue()));
           }
           return ret;
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -98,7 +98,7 @@ public class ComputeProviderAdapter {
               = ToV1.toV1(accumulator);
           computeProvider.validateResourceTemplateConfiguration(name, ToV1.toV1(configuration), accumulatorV1);
           FromV1.addNewConditions(accumulator, FromV1.fromV1(accumulatorV1));
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -109,25 +109,25 @@ public class ComputeProviderAdapter {
           com.cloudera.director.spi.v1.compute.ComputeInstanceTemplate computeInstanceTemplate;
           computeInstanceTemplate = computeProvider.createResourceTemplate(name, ToV1.toV1(configuration), tags);
           return (T) fromV1(computeInstanceTemplate);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
 
       @Override
-      public Collection<R> allocate(T template, Collection<String> resourceIds, int minCount)
+      public Collection<? extends R> allocate(T template, Collection<String> resourceIds, int minCount)
           throws InterruptedException {
         try {
           V v1Template = (V) toV1(template);
           computeProvider.allocate(v1Template, resourceIds, minCount);
           return find(template, resourceIds);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
 
       @Override
-      public Collection<R> find(T template, Collection<String> resourceIds) throws InterruptedException {
+      public Collection<? extends R> find(T template, Collection<String> resourceIds) throws InterruptedException {
         try {
           // todo return Collection
           Collection<U> computeInstances = computeProvider.find((V) toV1(template), resourceIds);
@@ -137,7 +137,7 @@ public class ComputeProviderAdapter {
             ret.add((R) fromV1(computeInstance));
           }
           return ret;
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -146,7 +146,7 @@ public class ComputeProviderAdapter {
       public void delete(T template, Collection<String> resourceIds) throws InterruptedException {
         try {
           computeProvider.delete((V) toV1(template), resourceIds);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }

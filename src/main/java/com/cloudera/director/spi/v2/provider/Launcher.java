@@ -25,13 +25,13 @@ import java.util.Locale;
 
 /**
  * <p>Cloud provider plugin launcher.</p>
- * <p>This class provides the entry point from Cloudera Director to the cloud provider plugin
+ * <p>This class provides the entry point from Cloudera Altus Director to the cloud provider plugin
  * implementation.</p>
  * <p>The plugin must be packaged as a single jar, with a provider-configuration file
  * {@code META-INF/services/com.cloudera.director.spi.v2.provider.Launcher} containing
  * the fully-qualified name of a class which implements this interface and has a no-argument
  * public constructor.</p>
- * <p>Cloudera Director uses Java's service loading mechanism to instantiate the class via
+ * <p>Cloudera Altus Director uses Java's service loading mechanism to instantiate the class via
  * reflection, then invokes the {@link #initialize(File, HttpProxyParameters)} method before
  * requesting any providers.</p>
  */

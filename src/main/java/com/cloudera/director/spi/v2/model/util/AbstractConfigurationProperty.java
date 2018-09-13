@@ -15,6 +15,7 @@
 package com.cloudera.director.spi.v2.model.util;
 
 import static com.cloudera.director.spi.v2.model.ConfigurationProperty.ConfigurationPropertyLocalizableAttribute.MISSING_VALUE_ERROR_MESSAGE;
+import static com.cloudera.director.spi.v2.model.ConfigurationProperty.ConfigurationPropertyLocalizableAttribute.PLACEHOLDER;
 import static com.cloudera.director.spi.v2.model.ConfigurationProperty.ConfigurationPropertyLocalizableAttribute.VALID_VALUES;
 import static com.cloudera.director.spi.v2.model.ConfigurationProperty.Widget;
 
@@ -42,6 +43,12 @@ public abstract class AbstractConfigurationProperty extends AbstractProperty<Wid
    * The default value of the configuration property.
    */
   private final String defaultValue;
+
+  /**
+   * The default human-readable placeholder message when no value has been set for a
+   * configuration property, used when a localized placeholder message cannot be found.
+   */
+  private final String defaultPlaceholder;
 
   /**
    * The default human-readable description of the configuration property, used when a
@@ -84,10 +91,14 @@ public abstract class AbstractConfigurationProperty extends AbstractProperty<Wid
    * @param sensitive           whether the configuration property contains sensitive information
    * @param hidden              whether the configuration property should be hidden from the user
    *                            interface
+   * @param defaultPlaceholder  he default human-readable placeholder message when no value has
+   *                            been set for a configuration property, used when a localized
+   *                            placeholder message cannot be found.
    */
   protected AbstractConfigurationProperty(String configKey, Type type, String name,
       boolean required, Widget widget, String defaultValue, String defaultDescription,
-      String defaultErrorMessage, List<String> validValues, boolean sensitive, boolean hidden) {
+      String defaultErrorMessage, List<String> validValues, boolean sensitive, boolean hidden,
+      String defaultPlaceholder) {
     super(configKey, type, name, (widget == null) ? Widget.TEXT : widget, defaultDescription,
         sensitive, hidden);
     this.required = required;
@@ -99,6 +110,7 @@ public abstract class AbstractConfigurationProperty extends AbstractProperty<Wid
         : defaultErrorMessage;
     this.validValues = (validValues == null) ? Collections.<String>emptyList() :
         Collections.unmodifiableList(new ArrayList<String>(validValues));
+    this.defaultPlaceholder = defaultPlaceholder;
   }
 
   @Override
@@ -114,6 +126,27 @@ public abstract class AbstractConfigurationProperty extends AbstractProperty<Wid
   @Override
   public String getDefaultValue() {
     return defaultValue;
+  }
+
+  /**
+   * Returns the default human-readable placeholder message when no value has been set for a
+   * configuration property, used when a localized placeholder message cannot be found.
+   *
+   * @return the default human-readable placeholder message when no value has been set for a
+   * configuration property, used when a localized placeholder message cannot be found.
+   */
+  public String getDefaultPlaceholder() {
+    return defaultPlaceholder;
+  }
+
+  @Override
+  public String getPlaceholder(LocalizationContext localizationContext) {
+    String defaultPlaceholder = getDefaultPlaceholder();
+    return (localizationContext == null) ? defaultPlaceholder : localizationContext.localize(
+        defaultPlaceholder,
+        getConfigKey(),
+        PLACEHOLDER.getKeyComponent()
+    );
   }
 
   /**

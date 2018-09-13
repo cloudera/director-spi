@@ -93,6 +93,11 @@ public interface ConfigurationProperty extends Property<ConfigurationProperty.Wi
     MISSING_VALUE_ERROR_MESSAGE("missingValueErrorMessage"),
 
     /**
+     * Placeholder message attribute.
+     */
+    PLACEHOLDER("placeholder"),
+
+    /**
      * Valid values message attribute.
      */
     VALID_VALUES("validValues");
@@ -141,6 +146,17 @@ public interface ConfigurationProperty extends Property<ConfigurationProperty.Wi
    * @return the default value of the configuration property
    */
   String getDefaultValue();
+
+  /**
+   * Returns the human-readable placeholder message when no value has been set for a
+   * configuration property.
+
+   *
+   * @param localizationContext the localization context
+   * @return the human-readable placeholder message when no value has been set for a
+   * configuration property
+   */
+  String getPlaceholder(LocalizationContext localizationContext);
 
   /**
    * Returns the localized human-readable error message for when a required configuration property

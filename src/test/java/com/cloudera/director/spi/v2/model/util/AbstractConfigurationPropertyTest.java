@@ -36,9 +36,9 @@ public class AbstractConfigurationPropertyTest {
 
     private TestConfigurationProperty(String configKey, Type type, String name, boolean required,
         Widget widget, String defaultValue, String defaultDescription, String defaultErrorMessage,
-        List<String> validValues, boolean sensitive, boolean hidden) {
+        List<String> validValues, boolean sensitive, boolean hidden, String defaultPlaceholder) {
       super(configKey, type, name, required, widget, defaultValue, defaultDescription, defaultErrorMessage,
-          validValues, sensitive, hidden);
+          validValues, sensitive, hidden, defaultPlaceholder);
     }
   }
 
@@ -54,6 +54,8 @@ public class AbstractConfigurationPropertyTest {
         return "testLabel1";
       } else if (defaultValue.equals("testVal2")) {
         return "testLabel2";
+      } else if (defaultValue.equals("defaultPlaceholder")) {
+        return "testLocalizedPlaceholder";
       }
       return "Unknown";
     }
@@ -64,14 +66,14 @@ public class AbstractConfigurationPropertyTest {
     TestConfigurationProperty testConfigurationProperty = new TestConfigurationProperty(
         "configKey", Property.Type.STRING, "name", false,
         ConfigurationProperty.Widget.TEXT, "defaultValue", "defaultDescription",
-        "defaultErrorMessage", Collections.<String>emptyList(), false, false);
+        "defaultErrorMessage", Collections.<String>emptyList(), false, false, "defaultPlaceholder");
  }
 
   @Test
   public void testNullParameters() {
     TestConfigurationProperty testConfigurationProperty = new TestConfigurationProperty(
         "configKey", null, null, false, null, null, "defaultDescription", null,  null, false,
-        false);
+        false, "defaultPlaceholder");
     assert(testConfigurationProperty.getValidValues()).isEmpty();
   }
 
@@ -79,14 +81,14 @@ public class AbstractConfigurationPropertyTest {
   public void testConfigKey_nullNotAllowed() {
     new TestConfigurationProperty(null, Property.Type.STRING, "name", false,
         ConfigurationProperty.Widget.TEXT, "defaultValue", "defaultDescription",
-        "defaultErrorMessage", Collections.<String>emptyList(), false, false);
+        "defaultErrorMessage", Collections.<String>emptyList(), false, false, "defaultPlaceholder");
   }
 
   @Test(expected = NullPointerException.class)
   public void testDefaultDescription_nullNotAllowed() {
     new TestConfigurationProperty("configKey", Property.Type.STRING, "name", false,
         ConfigurationProperty.Widget.TEXT, "defaultValue", null, "defaultErrorMessage",
-        Collections.<String>emptyList(), false, false);
+        Collections.<String>emptyList(), false, false, "defaultPlaceholder");
   }
 
   @Test
@@ -99,7 +101,7 @@ public class AbstractConfigurationPropertyTest {
     TestConfigurationProperty testConfigurationProperty = new TestConfigurationProperty(
         "configKey", Property.Type.STRING, "name", false,
         ConfigurationProperty.Widget.TEXT, "defaultValue", "defaultDescription",
-        "defaultErrorMessage", validValues, false, false);
+        "defaultErrorMessage", validValues, false, false, null);
 
     List<ConfigurationPropertyValue> localizedValues =
         testConfigurationProperty.getValidValues(new TestLocalizer(Locale.getDefault(), ""));
@@ -112,4 +114,18 @@ public class AbstractConfigurationPropertyTest {
     assertThat(localizedValues.get(2).getValue()).isEqualTo("testVal3");
     assertThat(localizedValues.get(2).getLabel()).isEqualTo("Unknown");
   }
+
+  @Test
+  public void testPlaceholderLocalization() {
+    TestConfigurationProperty testConfigurationProperty = new TestConfigurationProperty(
+        "configKey", Property.Type.STRING, "name", false,
+        ConfigurationProperty.Widget.TEXT, "defaultValue", "defaultDescription",
+        "defaultErrorMessage", Collections.emptyList(), false, false, "defaultPlaceholder");
+
+    String localizedPlaceholder = testConfigurationProperty.getPlaceholder(
+        new TestLocalizer(Locale.getDefault(), ""));
+
+    assertThat(localizedPlaceholder).isEqualTo("testLocalizedPlaceholder");
+  }
+
 }

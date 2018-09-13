@@ -66,6 +66,7 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
         .required(true)
         .widget(ConfigurationProperty.Widget.OPENLIST)
         .defaultDescription("The image ID.")
+        .defaultPlaceholder("Select an image")
         .defaultErrorMessage("Image is mandatory")
         .build()),
 
@@ -78,7 +79,21 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
         .required(true)
         .widget(ConfigurationProperty.Widget.OPENLIST)
         .defaultDescription("The instance type.")
+        .defaultPlaceholder("Select an instance type")
         .defaultErrorMessage("Instance type is mandatory")
+        .build()),
+
+    /**
+     * Whether instances created from this template are part of an automatic instance group.
+     */
+    AUTOMATIC(new SimpleConfigurationPropertyBuilder()
+        .configKey("automatic")
+        .name("Automatic")
+        .required(false)
+        .widget(ConfigurationProperty.Widget.CHECKBOX)
+        .defaultDescription(
+            "Whether instances created from this template are part of an automatic instance group.")
+        .hidden(true)
         .build()),
 
     /**
@@ -189,6 +204,11 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
   }
 
   /**
+   * Whether instances created from this template are part of an automatic instance group.
+   */
+  private final boolean automatic;
+
+  /**
    * Creates a compute instance template with the specified parameters.
    *
    * @param name                        the name of the template
@@ -199,5 +219,17 @@ public class ComputeInstanceTemplate extends InstanceTemplate {
   public ComputeInstanceTemplate(String name, Configured configuration, Map<String, String> tags,
       LocalizationContext providerLocalizationContext) {
     super(name, configuration, tags, providerLocalizationContext);
+    LocalizationContext localizationContext = getLocalizationContext();
+    this.automatic = Boolean.parseBoolean(getConfigurationValue(
+        ComputeInstanceTemplateConfigurationPropertyToken.AUTOMATIC, localizationContext));
+  }
+
+  /**
+   * Returns whether instances created from this template are part of an automatic instance group.
+   *
+   * @return whether instances created from this template are part of an automatic instance group
+   */
+  public boolean isAutomatic() {
+    return automatic;
   }
 }

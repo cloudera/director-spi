@@ -55,8 +55,8 @@ public class DatabaseServerProviderAdapter {
       T extends DatabaseServerInstanceTemplate,
       U extends com.cloudera.director.spi.v1.database.DatabaseServerInstance<V>,
       V extends com.cloudera.director.spi.v1.database.DatabaseServerInstanceTemplate>
-  DatabaseServerProvider<R,T> fromV1(
-      final com.cloudera.director.spi.v1.database.DatabaseServerProvider<U,V> databaseServerProvider) {
+  DatabaseServerProvider<R, T> fromV1(
+      final com.cloudera.director.spi.v1.database.DatabaseServerProvider<U, V> databaseServerProvider) {
     return new DatabaseServerProvider<R, T>() {
       @Override
       public Map<String, InstanceState> getInstanceState(T template, Collection<String> instanceIds) {
@@ -70,7 +70,7 @@ public class DatabaseServerProviderAdapter {
             ret.put(entry.getKey(), FromV1.fromV1(entry.getValue()));
           }
           return ret;
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -105,7 +105,7 @@ public class DatabaseServerProviderAdapter {
           databaseServerProvider.validateResourceTemplateConfiguration(name, ToV1.toV1(configuration),
               accumulatorV1);
           FromV1.addNewConditions(accumulator, FromV1.fromV1(accumulatorV1));
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -117,7 +117,7 @@ public class DatabaseServerProviderAdapter {
           databaseServerInstanceTemplate =
               databaseServerProvider.createResourceTemplate(name, ToV1.toV1(configuration), tags);
           return (T) fromV1(databaseServerInstanceTemplate);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -127,7 +127,7 @@ public class DatabaseServerProviderAdapter {
         try {
           databaseServerProvider.allocate((V) toV1(template), resourceIds, minCount);
           return find(template, resourceIds);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -143,7 +143,7 @@ public class DatabaseServerProviderAdapter {
             ret.add((R) fromV1(databaseServerInstance));
           }
           return ret;
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }
@@ -152,7 +152,7 @@ public class DatabaseServerProviderAdapter {
       public void delete(T template, Collection<String> resourceIds) throws InterruptedException {
         try {
           databaseServerProvider.delete((V) toV1(template), resourceIds);
-        } catch(com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
+        } catch (com.cloudera.director.spi.v1.model.exception.AbstractPluginException ex) {
           throw ExceptionsAdapter.fromV1(ex);
         }
       }

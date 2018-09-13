@@ -29,6 +29,6 @@ public class SimpleConfigurationPropertyBuilder extends AbstractConfigurationPro
   public SimpleConfigurationProperty build() {
     return new SimpleConfigurationProperty(getConfigKey(), getType(), getName(), isRequired(),
         getWidget(), getDefaultValue(), getDefaultDescription(), getDefaultErrorMessage(),
-        getValidValues(), isSensitive(), isHidden());
+        getValidValues(), isSensitive(), isHidden(), getDefaultPlaceholder());
   }
 }

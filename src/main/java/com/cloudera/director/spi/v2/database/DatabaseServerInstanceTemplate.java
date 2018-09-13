@@ -70,6 +70,7 @@ public class DatabaseServerInstanceTemplate extends InstanceTemplate {
         .required(true)
         .widget(ConfigurationProperty.Widget.OPENLIST)
         .defaultDescription("The database type.")
+        .defaultPlaceholder("Select a database type")
         .defaultErrorMessage("Database type is mandatory")
         .build()),
 

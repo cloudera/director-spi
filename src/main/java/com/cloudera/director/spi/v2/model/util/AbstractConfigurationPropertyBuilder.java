@@ -40,6 +40,12 @@ public abstract class AbstractConfigurationPropertyBuilder
   private String defaultValue;
 
   /**
+   * The default human-readable placeholder message when no value has been set for a
+   * configuration property, used when a localized placeholder message cannot be found.
+   */
+  private String defaultPlaceholder;
+
+  /**
    * The human-readable error message for when a required configuration property is missing.
    */
   private String defaultErrorMessage;
@@ -101,10 +107,36 @@ public abstract class AbstractConfigurationPropertyBuilder
    * Sets the default value of the configuration property.
    *
    * @param defaultValue the default value of the configuration property
-   * @return the default value of the configuration property
+   * @return the builder
    */
   public B defaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
+    return getThis();
+  }
+
+  /**
+   * Returns the default human-readable placeholder message of the configuration
+   * property, used when a localized placeholder cannot be found.
+   *
+   * @return the default human-readable placeholder message of the configuration
+   * property, used when a localized placeholder cannot be found.
+   */
+  public String getDefaultPlaceholder() {
+    return defaultPlaceholder;
+  }
+
+  /**
+   * Sets the default human-readable placeholder message when no value
+   * has been set for a configuration property, used when a localized
+   * placeholder message cannot be found.
+   *
+   * @param defaultPlaceholder the default human-readable placeholder message when no value
+   *                           has been set for a configuration property, used when a localized
+   *                           placeholder message cannot be found.
+   * @return the builder
+   */
+  public B defaultPlaceholder(String defaultPlaceholder) {
+    this.defaultPlaceholder = defaultPlaceholder;
     return getThis();
   }
 

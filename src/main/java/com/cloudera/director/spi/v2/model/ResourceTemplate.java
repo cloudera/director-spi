@@ -29,6 +29,13 @@ public interface ResourceTemplate extends Configured {
   String getName();
 
   /**
+   * Returns the unique ID of the group containing instances created from this template.
+   *
+   * @return the unique ID of the group containing instances created from this template
+   */
+  String getGroupId();
+
+  /**
    * Returns the map of tags to be applied to resources created from the template.
    *
    * @return the map of tags to be applied to resources created from the template
@@ -42,5 +49,4 @@ public interface ResourceTemplate extends Configured {
    * to use this in any way.
    */
   Object unwrap();
-
 }

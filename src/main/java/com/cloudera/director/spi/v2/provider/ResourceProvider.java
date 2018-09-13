@@ -85,8 +85,8 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
    * resource template. More specifically, <p/>
    * if at least minCount resources can be allocated, the allocated amount of resources
    * will be returned.<p/>
-   * if minCount resources cannot be allocated, no resource will be allocated with any billing
-   * implications, returning an empty collection.
+   * if minCount resources cannot be allocated, the method should fail by throwing an appropriate
+   * exception and should make a good-faith effort to not leak resources.
    *
    * @param template    the resource template
    * @param resourceIds the unique identifiers for the resources
@@ -94,10 +94,28 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
    *                    allocated
    * @return the successfully allocated resources. If minCount can be satisfied, it will return a
    * collection with resources equal to or greater than <code>minCount</code> in size. Otherwise
-   * it will return an empty collection
+   * it should throw an appropriate exception.
    * @throws InterruptedException if the operation is interrupted
    */
-  Collection<R> allocate(T template, Collection<String> resourceIds, int minCount)
+  /*
+   * Note: resourceId or template.groupId are used for idempotency, implementation does not need to
+   * map resourceId to each instance.
+   *
+   * In current implementation,
+   * preconditions:
+   * 1) if template.isAutomatic == true, the resourceIds passed here are placeholders. the actual content
+   * does not matter, whereas the size of the collection matters.
+   * 2) if template.isAutomatic == false, the resourceIds passed here are virtual instance Ids
+   *
+   * postconditions:
+   * 0) if the same group Id or resource Ids are passed, no duplicate group or instances should be
+   * created
+   * 1) if template.isAutomatic == true, the returned object R does not contain resourceId, R::getId returns
+   * provider-specific instance Id
+   * 2) if template.isAutomatic == false, the returned object R contains resourceId, that R::getId returns
+   * resourceId instead of provider-specific instance Id
+   */
+  Collection<? extends R> allocate(T template, Collection<String> resourceIds, int minCount)
       throws InterruptedException;
 
   /**
@@ -113,7 +131,19 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
    * details if they are not fully ready for use
    * @throws InterruptedException if the operation is interrupted
    */
-  Collection<R> find(T template, Collection<String> resourceIds) throws InterruptedException;
+  /*
+   * Preconditions:
+   * 1) if template.isAutomatic == true, the resourceIds are provider-specific resource Ids
+   * 2) if template.isAutomatic == false, the resourceIds are virtual instance Ids
+   *
+   * Postconditions:
+   * 0) instances matching resourceIds will be returned
+   * 1) if template.isAutomatic == true, the returned object R returns provider-specific resource Id
+    * when R::getId is called. If the resourceIds is empty, all resources in the group will be listed
+   * 2) if template.isAutomatic == false, the returned object R returns virtual instance Id when
+   * R::getId is called. If the resourceIds is empty, no resource will be listed
+   */
+  Collection<? extends R> find(T template, Collection<String> resourceIds) throws InterruptedException;
 
   /**
    * Permanently removes the specified resources, which are guaranteed to have been created by
@@ -122,6 +152,17 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
    * @param template    the template used to create those resources
    * @param resourceIds the unique identifiers for the resources
    * @throws InterruptedException if the operation is interrupted
+   */
+  /*
+   * Preconditions:
+   * 1) if template.isAutomatic == true, the resourceIds are provider-specific resource Ids
+   * 2) if template.isAutomatic == false, the resourceIds are virtual instance Ids
+   *
+   * Postconditions:
+   * 0) instances matching resourceIds is terminated
+   * 1) if template.isAutomatic == true, and if the resourceIds is empty, the entire group is
+   * terminated
+   * 2) if template.isAutomatic == false, and if the resourceIds is empty, no instance is terminated
    */
   void delete(T template, Collection<String> resourceIds) throws InterruptedException;
 }

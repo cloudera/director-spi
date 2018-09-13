@@ -428,6 +428,12 @@ public class FromV1 {
       }
 
       @Override
+      public String getPlaceholder(LocalizationContext localizationContext) {
+        // placeholder does not exist in SPI v1
+        return null;
+      }
+
+      @Override
       public String getMissingValueErrorMessage(LocalizationContext localizationContext) {
         return configurationProperty.getMissingValueErrorMessage(toV1(localizationContext));
       }

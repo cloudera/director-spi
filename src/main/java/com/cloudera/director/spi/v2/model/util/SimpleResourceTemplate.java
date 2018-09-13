@@ -63,6 +63,19 @@ public class SimpleResourceTemplate extends AbstractConfigured implements Resour
         .name("Name")
         .defaultDescription("The name of the resource.")
         .hidden(true)
+        .build()),
+
+    /**
+     * The unique ID of the group containing instances created from this template.
+     */
+    GROUP_ID(new SimpleConfigurationPropertyBuilder()
+        .configKey("group")
+        .name("Group ID")
+        .required(false)
+        .widget(ConfigurationProperty.Widget.TEXT)
+        .defaultDescription(
+            "The unique ID of the group containing instances created from this template.")
+        .hidden(true)
         .build());
 
     /**
@@ -113,6 +126,11 @@ public class SimpleResourceTemplate extends AbstractConfigured implements Resour
   private final LocalizationContext localizationContext;
 
   /**
+   * The unique ID of the group containing resources created from this template.
+   */
+  private final String groupId;
+
+  /**
    * Creates a base resource template with the specified parameters.
    *
    * @param name                        the name of the template
@@ -129,6 +147,8 @@ public class SimpleResourceTemplate extends AbstractConfigured implements Resour
     this.tags = (tags == null) ? Collections.<String, String>emptyMap() :
         Collections.unmodifiableMap(new LinkedHashMap<String, String>(tags));
     this.localizationContext = getTemplateLocalizationContext(providerLocalizationContext);
+    this.groupId = getConfigurationValue(
+        SimpleResourceTemplateConfigurationPropertyToken.GROUP_ID, localizationContext);
   }
 
   @Override
@@ -153,5 +173,15 @@ public class SimpleResourceTemplate extends AbstractConfigured implements Resour
    */
   public LocalizationContext getLocalizationContext() {
     return localizationContext;
+  }
+
+  /**
+   * Returns the unique ID of the group containing instances created from this template.
+   *
+   * @return the unique ID of the group containing instances created from this template
+   */
+  @Override
+  public String getGroupId() {
+    return groupId;
   }
 }
