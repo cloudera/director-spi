@@ -16,7 +16,6 @@ package com.cloudera.director.spi.v2.model;
 
 /**
  * <p>Represents the status of an instance in a provider-agnostic way.</p>
- * <p/>
  * <p>Note that for a given provider, some statuses may be unreachable, and some may correspond to
  * multiple distinct provider-specific instance states.</p>
  */

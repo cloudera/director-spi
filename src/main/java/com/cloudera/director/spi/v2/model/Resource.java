@@ -72,10 +72,9 @@ public interface Resource<T extends ResourceTemplate> {
   Map<String, String> getProperties();
 
   /**
-   * Return the provider specific underlying implementation of this resource
-   * <p/>
-   * Intended for internal provider use only. The consumer of the API will not try
-   * to use this in any way.
+   * <p>Returns the provider specific underlying implementation of this resource.</p>
+   * <p>Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.</p>
    */
   Object unwrap();
 

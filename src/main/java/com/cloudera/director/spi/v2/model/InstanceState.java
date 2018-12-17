@@ -35,10 +35,9 @@ public interface InstanceState {
   String getInstanceStateDescription(LocalizationContext localizationContext);
 
   /**
-   * Return the provider specific version of this state object or null
-   * <p/>
-   * Intended for internal provider use only. The consumer of the API will not try
-   * to use this in any way.
+   * <p>Returns the provider specific version of this state object or null.</p>
+   * <p>Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.</p>
    */
   Object unwrap();
 

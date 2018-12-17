@@ -43,10 +43,9 @@ public interface ResourceTemplate extends Configured {
   Map<String, String> getTags();
 
   /**
-   * Return the underlying cloud provider specific implementation or null
-   * <p/>
-   * Intended for internal provider use only. The consumer of the API will not try
-   * to use this in any way.
+   * <p>Return the underlying cloud provider specific implementation or null</p>
+   * <p>Intended for internal provider use only. The consumer of the API will not try
+   * to use this in any way.</p>
    */
   Object unwrap();
 }

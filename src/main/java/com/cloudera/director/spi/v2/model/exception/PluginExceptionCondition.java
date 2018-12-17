@@ -14,7 +14,7 @@
 
 package com.cloudera.director.spi.v2.model.exception;
 
-import static com.cloudera.director.spi.v2.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -23,13 +23,29 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Represents an error or warning that contributed to an exception.
+ * Represents an error or warning that contributed to an exception. A condition
+ * has an enumerated type and a map of information about the underlying
+ * exception.<p>
+ *
+ * The map should have a "message" key containing a non-empty message
+ * drawn from the exception or some underlying cause. A default message is
+ * provided if no message is available (either null or empty).
  */
-@SuppressWarnings("UnusedDeclaration")
 public final class PluginExceptionCondition implements Comparable<PluginExceptionCondition>,
     Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * The key for the exception message in the additional exception information.
+   */
+  public static final String KEY_MESSAGE = "message";
+
+  /**
+   * The default message for conditions where the corresponding exception lacks
+   * a message.
+   */
+  public static final String DEFAULT_MESSAGE = "Message not available";
 
   /**
    * The type of condition.
@@ -60,21 +76,19 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
 
 
   /**
-   * Return a map with a single message property.
+   * Returns a map with a single message property. If the message is null, a
+   * generic message is placed into the map.
    *
    * @param message the value for the message property
    * @return a map with a single message property
    */
   public static Map<String, String> toExceptionInfoMap(String message) {
-    checkNotNull(message, "message is null");
-    if (message.isEmpty()) {
-      throw new IllegalArgumentException("message is empty");
-    }
-    return Collections.singletonMap("message", message);
+    return Collections.singletonMap(KEY_MESSAGE, (message == null || message.isEmpty() ? DEFAULT_MESSAGE : message));
   }
 
   /**
-   * Creates a plugin exception condition with only a message.
+   * Creates a plugin exception condition with only a message. If the message
+   * is null or empty, a default is substituted.
    *
    * @param type    the type of condition
    * @param message the message
@@ -85,14 +99,23 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
 
   /**
    * Creates a plugin exception condition with detailed exception information.
+   * If the detailed exception information does not include a non-empty
+   * "message" value, a default is substituted.
    *
    * @param type          the type of condition
    * @param exceptionInfo detailed exception information
+   * @throws NullPointerException if type or exceptionInfo is null
    */
   public PluginExceptionCondition(Type type, Map<String, String> exceptionInfo) {
-    this.type = checkNotNull(type, "type is null");
-    checkNotNull(exceptionInfo, "exceptionInfo is null");
-    this.exceptionInfo = exceptionInfo;
+    this.type = requireNonNull(type, "type is null");
+    requireNonNull(exceptionInfo, "exceptionInfo is null");
+    this.exceptionInfo = new HashMap<>(exceptionInfo);
+
+    if (!this.exceptionInfo.containsKey(KEY_MESSAGE) ||
+        this.exceptionInfo.get(KEY_MESSAGE) == null ||
+        this.exceptionInfo.get(KEY_MESSAGE).isEmpty()) {
+      this.exceptionInfo.put(KEY_MESSAGE, DEFAULT_MESSAGE);
+    }
   }
 
   /**
@@ -105,20 +128,12 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
   }
 
   /**
-   * Returns the message if present.
+   * Returns the message.
    *
    * @return the message
-   * @throws IllegalStateException if no message is present
    */
   public String getMessage() {
-    if (exceptionInfo.containsKey("message")) {
-      String message = exceptionInfo.get("message");
-      if (message.isEmpty()) {
-        throw new IllegalArgumentException("message is empty");
-      }
-      return message;
-    }
-    throw new IllegalStateException("No message property in exception information map");
+    return exceptionInfo.get(KEY_MESSAGE);
   }
 
   /**
@@ -176,7 +191,6 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
         '}';
   }
 
-  @SuppressWarnings({ "NullableProblems", "PMD.UselessParentheses" })
   @Override
   public int compareTo(PluginExceptionCondition o) {
     int result = type.compareTo(o.type);

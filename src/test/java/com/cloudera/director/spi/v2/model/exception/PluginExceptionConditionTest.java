@@ -4,6 +4,9 @@ import static com.cloudera.director.spi.v2.model.exception.PluginExceptionCondit
 import static com.cloudera.director.spi.v2.model.exception.PluginExceptionCondition.Type.ERROR;
 import static com.cloudera.director.spi.v2.model.exception.PluginExceptionCondition.Type.WARNING;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -18,11 +21,12 @@ public class PluginExceptionConditionTest {
 
   protected static final String[] MESSAGES = {MSG0, MSG1};
 
+  private PluginExceptionCondition condition;
+
   @Test
   public void testConstructor() {
     for (Type expectedType : Type.values()) {
-      PluginExceptionCondition condition =
-          new PluginExceptionCondition(expectedType, MSG0);
+      condition = new PluginExceptionCondition(expectedType, MSG0);
       Type actualType = condition.getType();
       assertThat(actualType).isEqualTo(expectedType);
       assertThat(condition.getMessage()).isEqualTo(MSG0);
@@ -70,22 +74,47 @@ public class PluginExceptionConditionTest {
     }
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  private int signum(int i) {
+    return (i == 0) ? 0 : ((i < 0) ? -1 : 1);
+  }
+
+  @Test
+  public void testNullMessage() {
+    condition = new PluginExceptionCondition(ERROR, (String) null);
+    assertThat(condition.getMessage()).isEqualTo(PluginExceptionCondition.DEFAULT_MESSAGE);
+    assertThat(condition.getExceptionInfo())
+        .containsExactly(entry(PluginExceptionCondition.KEY_MESSAGE, PluginExceptionCondition.DEFAULT_MESSAGE));
+  }
+
+  @Test
   public void testEmptyMessage() {
-    new PluginExceptionCondition(ERROR, "");
+    condition = new PluginExceptionCondition(ERROR, "");
+    assertThat(condition.getMessage()).isEqualTo(PluginExceptionCondition.DEFAULT_MESSAGE);
+    assertThat(condition.getExceptionInfo())
+        .containsExactly(entry(PluginExceptionCondition.KEY_MESSAGE, PluginExceptionCondition.DEFAULT_MESSAGE));
   }
 
   @Test
   public void testToString() {
     for (Type type : Type.values()) {
-      PluginExceptionCondition condition = new PluginExceptionCondition(type, MSG0);
+      condition = new PluginExceptionCondition(type, MSG0);
       String s = condition.toString();
       assertThat(s.contains(type.toString()));
       assertThat(s.contains(MSG0));
     }
   }
 
-  private int signum(int i) {
-    return (i == 0) ? 0 : ((i < 0) ? -1 : 1);
+  @Test
+  public void testToExceptionInfoMap() {
+    Map<String, String> exceptionMap = PluginExceptionCondition.toExceptionInfoMap(MSG0);
+    assertThat(exceptionMap).containsExactly(entry(PluginExceptionCondition.KEY_MESSAGE, MSG0));
+
+    exceptionMap = PluginExceptionCondition.toExceptionInfoMap(null);
+    assertThat(exceptionMap)
+        .containsExactly(entry(PluginExceptionCondition.KEY_MESSAGE, PluginExceptionCondition.DEFAULT_MESSAGE));
+
+    exceptionMap = PluginExceptionCondition.toExceptionInfoMap("");
+    assertThat(exceptionMap)
+        .containsExactly(entry(PluginExceptionCondition.KEY_MESSAGE, PluginExceptionCondition.DEFAULT_MESSAGE));
   }
 }

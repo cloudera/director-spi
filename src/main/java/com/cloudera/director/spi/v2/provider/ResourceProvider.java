@@ -81,12 +81,11 @@ public interface ResourceProvider<R extends Resource<T>, T extends ResourceTempl
   T createResourceTemplate(String name, Configured configuration, Map<String, String> tags);
 
   /**
-   * Atomically allocates multiple resources with the specified identifiers based on a single
-   * resource template. More specifically, <p/>
-   * if at least minCount resources can be allocated, the allocated amount of resources
-   * will be returned.<p/>
-   * if minCount resources cannot be allocated, the method should fail by throwing an appropriate
-   * exception and should make a good-faith effort to not leak resources.
+   * <p>Atomically allocates multiple resources with the specified identifiers based on a single
+   * resource template. More specifically, if at least minCount resources can be allocated, the
+   * allocated amount of resources will be returned.</p>
+   * <p>If minCount resources cannot be allocated, the method should fail by throwing an appropriate
+   * exception and should make a good-faith effort to not leak resources.</p>
    *
    * @param template    the resource template
    * @param resourceIds the unique identifiers for the resources

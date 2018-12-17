@@ -43,15 +43,12 @@ public class HttpProxyParameters {
   }
 
   /**
-   * Creates HTTP proxy parameters with the specified parameters.
-   * <p/>
-   * The host and port must be specified together.
-   * <p/>
-   * The username and password must also be specified together and must accompany the
-   * host and port.
-   * <p/>
-   * The domain and workstation must be specified together and must accompany the
-   * username, password, host, and port.
+   * <p>Creates HTTP proxy parameters with the specified parameters.</p>
+   * <p>The host and port must be specified together.</p>
+   * <p>The username and password must also be specified together and must accompany the
+   * host and port.</p>
+   * <p>The domain and workstation must be specified together and must accompany the
+   * username, password, host, and port.</p>
    *
    * @param host                     the proxy host
    * @param port                     the proxy port
