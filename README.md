@@ -41,6 +41,7 @@ Plugin packaging, installation, and usage are discussed in detail below, but at 
 These instructions are geared towards plugin authors, and assume familiarity with git, github, maven, etc. You can create your plugin project from scratch, or clone one of these open-source plugin implementations:
 
 * [AWS (Amazon Web Services)](https://github.com/cloudera/director-aws-plugin), a plugin supporting both compute (EC2) and database server (RDS) resource providers;
+* [Microsoft Azure (Azure)](https://github.com/cloudera/director-azure-plugin), a plugin supporting compute resource providers;
 * [GCP (Google Cloud Platform)](https://github.com/cloudera/director-google-plugin), a plugin supporting a compute (GCE) resource provider; and
 * [BYON (Bring Your Own Nodes)](https://github.com/cloudera/director-byon-plugin-example), a simple but not fully-functional example plugin.
 

@@ -133,7 +133,7 @@ public final class PluginExceptionCondition implements Comparable<PluginExceptio
         '}';
   }
 
-  @SuppressWarnings({"NullableProblems", "PMD.UselessParentheses"})
+  @SuppressWarnings({"NullableProblems", "PMD.UselessParentheses" })
   @Override
   public int compareTo(PluginExceptionCondition o) {
     int result = type.compareTo(o.type);
